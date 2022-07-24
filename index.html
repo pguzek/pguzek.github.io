@@ -7,25 +7,52 @@
 </head>
 
 <body style="margin:0">
-    <svg width="auto" height="99vh" preserveAspectRatio="none" viewBox="0 0 1200 800" style="border-bottom: 5px groove darkgray; border-right: 5px groove darkgray; float: left;">
-        <g id="view" transform="translate(600 400) scale(0.5) rotate(0)">
+    <svg id="view" width="auto" height="99vh" preserveAspectRatio="none" viewBox="0 0 1200 800" style="border-bottom: 5px groove darkgray; border-right: 5px groove darkgray; float: left;">
+        <g id="world" transform="translate(600 400) scale(0.75) rotate(0)">
             <style>polygon {
                     fill: lightgray;
                     stroke: black;
                     stroke-width: 1.5;
                 }
-                #view g:hover polygon {
+                #world g g:hover polygon {
+                    fill: azure;
+                }
+                #world g[selected] polygon {
+                    fill: lightskyblue;
+                }
+                #world g[selected]:hover polygon {
+                    fill: lavender;
+                }
+                #world g[available] polygon {
                     fill: lightyellow;
                 }
-                #view g g:hover polygon {
+                #world g[available]:hover polygon {
                     fill: lightgreen;
-                }
-                #view g[selected] polygon {
-                    fill: lightskyblue;
                 }</style>
         </g>
     </svg>
-    <script src="/main.1ff86059.js"></script>
+    <div>
+        <style>.main-panel {
+                float: right;
+                margin: 2.5em;
+                padding: 1em;
+            }
+            .panel {
+                width: 20%;
+                border: 1px ridge darkgray;
+                border-radius: 5px;
+            }</style>
+        <div class="main-panel panel">
+            <h1 style="text-align: center;">Control panel</h1>
+            <div>
+                <div>LMB: select</div>
+                <div>RMB: pan/deselect</div>
+                <div>MMB: rotate</div>
+                <div>Wheel: zoom</div>
+            </div>
+        </div>
+    </div>
+    <script src="/main.c391e1cf.js"></script>
 </body>
 
 </html>

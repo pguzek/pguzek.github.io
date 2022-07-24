@@ -117,7 +117,200 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"KA2S":[function(require,module,exports) {
+})({"e7Sb":[function(require,module,exports) {
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+module.exports = _arrayWithHoles;
+},{}],"nyVk":[function(require,module,exports) {
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+module.exports = _iterableToArrayLimit;
+},{}],"ixeg":[function(require,module,exports) {
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+
+  return arr2;
+}
+
+module.exports = _arrayLikeToArray;
+},{}],"IOZJ":[function(require,module,exports) {
+var arrayLikeToArray = require("./arrayLikeToArray");
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
+}
+
+module.exports = _unsupportedIterableToArray;
+},{"./arrayLikeToArray":"ixeg"}],"yJnk":[function(require,module,exports) {
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+module.exports = _nonIterableRest;
+},{}],"xw6J":[function(require,module,exports) {
+var arrayWithHoles = require("./arrayWithHoles");
+
+var iterableToArrayLimit = require("./iterableToArrayLimit");
+
+var unsupportedIterableToArray = require("./unsupportedIterableToArray");
+
+var nonIterableRest = require("./nonIterableRest");
+
+function _slicedToArray(arr, i) {
+  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || unsupportedIterableToArray(arr, i) || nonIterableRest();
+}
+
+module.exports = _slicedToArray;
+},{"./arrayWithHoles":"e7Sb","./iterableToArrayLimit":"nyVk","./unsupportedIterableToArray":"IOZJ","./nonIterableRest":"yJnk"}],"fk2o":[function(require,module,exports) {
+var arrayLikeToArray = require("./arrayLikeToArray");
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return arrayLikeToArray(arr);
+}
+
+module.exports = _arrayWithoutHoles;
+},{"./arrayLikeToArray":"ixeg"}],"rp83":[function(require,module,exports) {
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+}
+
+module.exports = _iterableToArray;
+},{}],"v5FO":[function(require,module,exports) {
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+module.exports = _nonIterableSpread;
+},{}],"YtCi":[function(require,module,exports) {
+var arrayWithoutHoles = require("./arrayWithoutHoles");
+
+var iterableToArray = require("./iterableToArray");
+
+var unsupportedIterableToArray = require("./unsupportedIterableToArray");
+
+var nonIterableSpread = require("./nonIterableSpread");
+
+function _toConsumableArray(arr) {
+  return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();
+}
+
+module.exports = _toConsumableArray;
+},{"./arrayWithoutHoles":"fk2o","./iterableToArray":"rp83","./unsupportedIterableToArray":"IOZJ","./nonIterableSpread":"v5FO"}],"ZBnv":[function(require,module,exports) {
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+module.exports = _classCallCheck;
+},{}],"iIt7":[function(require,module,exports) {
+"use strict";
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.TestObject = void 0;
+
+var TestObject = function TestObject() {
+  (0, _classCallCheck2.default)(this, TestObject);
+
+  this.draw = function (origin) {
+    var size = 32;
+    return "\n            <svg x=".concat(origin.x - size / 2, " y=").concat(origin.y - size / 2, " width=\"").concat(size, "\" height=\"").concat(size, "\" viewbox=\"0 0 ").concat(size, " ").concat(size, "\">\n                <path d=\"M28.623,25c-0.722-1.938-2.388-3.365-4.005-4.751c-1.1-0.942-2.138-1.833-2.786-2.804\n                c-0.704-1.056-1.236-2.747-1.549-4.915c2.061-1.593,3.097-4.201,2.589-6.883c-0.53-2.797-2.804-5.042-5.607-5.536\n                C12.85-0.666,9,2.726,9,7c0,2.185,1.005,4.208,2.717,5.531c-0.313,2.167-0.845,3.859-1.549,4.915\n                c-0.647,0.971-1.686,1.861-2.786,2.804C5.765,21.635,4.099,23.062,3.377,25H2c-0.552,0-1,0.448-1,1v5c0,0.552,0.448,1,1,1h28\n                c0.552,0,1-0.448,1-1v-5c0-0.552-0.448-1-1-1H28.623z M11,7c0-1.331,0.491-2.632,1.305-3.626c1.017-1.01,2.351-1.686,3.695-1.686\n                c0.986,0,1.944,0.331,2.771,0.877C20.113,3.58,21,5.267,21,7c0,2.757-2.243,5-5,5S11,9.757,11,7z M8.684,21.768\n                c1.154-0.989,2.348-2.012,3.148-3.213c0.909-1.364,1.545-3.387,1.897-6.003C14.43,12.839,15.196,13,16,13s1.57-0.161,2.271-0.448\n                c0.353,2.616,0.988,4.639,1.897,6.003c0.8,1.201,1.994,2.224,3.148,3.213c1.58,1.354,3.063,2.639,3.518,4.232H5.165\n                C5.62,24.406,7.104,23.121,8.684,21.768z M29,30H3v-3h26V30z\"/>\n            </svg>\n        ");
+  };
+};
+
+exports.TestObject = TestObject;
+},{"@babel/runtime/helpers/classCallCheck":"ZBnv"}],"Jibl":[function(require,module,exports) {
+function _setPrototypeOf(o, p) {
+  module.exports = _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+module.exports = _setPrototypeOf;
+},{}],"v5KI":[function(require,module,exports) {
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+module.exports = _isNativeReflectConstruct;
+},{}],"XsAw":[function(require,module,exports) {
+var setPrototypeOf = require("./setPrototypeOf");
+
+var isNativeReflectConstruct = require("./isNativeReflectConstruct");
+
+function _construct(Parent, args, Class) {
+  if (isNativeReflectConstruct()) {
+    module.exports = _construct = Reflect.construct;
+  } else {
+    module.exports = _construct = function _construct(Parent, args, Class) {
+      var a = [null];
+      a.push.apply(a, args);
+      var Constructor = Function.bind.apply(Parent, a);
+      var instance = new Constructor();
+      if (Class) setPrototypeOf(instance, Class.prototype);
+      return instance;
+    };
+  }
+
+  return _construct.apply(null, arguments);
+}
+
+module.exports = _construct;
+},{"./setPrototypeOf":"Jibl","./isNativeReflectConstruct":"v5KI"}],"KA2S":[function(require,module,exports) {
 var define;
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
@@ -871,66 +1064,7 @@ try {
 },{}],"m4eR":[function(require,module,exports) {
 module.exports = require("regenerator-runtime");
 
-},{"regenerator-runtime":"KA2S"}],"ixeg":[function(require,module,exports) {
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
-
-  return arr2;
-}
-
-module.exports = _arrayLikeToArray;
-},{}],"fk2o":[function(require,module,exports) {
-var arrayLikeToArray = require("./arrayLikeToArray");
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return arrayLikeToArray(arr);
-}
-
-module.exports = _arrayWithoutHoles;
-},{"./arrayLikeToArray":"ixeg"}],"rp83":[function(require,module,exports) {
-function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
-}
-
-module.exports = _iterableToArray;
-},{}],"IOZJ":[function(require,module,exports) {
-var arrayLikeToArray = require("./arrayLikeToArray");
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
-}
-
-module.exports = _unsupportedIterableToArray;
-},{"./arrayLikeToArray":"ixeg"}],"v5FO":[function(require,module,exports) {
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-
-module.exports = _nonIterableSpread;
-},{}],"YtCi":[function(require,module,exports) {
-var arrayWithoutHoles = require("./arrayWithoutHoles");
-
-var iterableToArray = require("./iterableToArray");
-
-var unsupportedIterableToArray = require("./unsupportedIterableToArray");
-
-var nonIterableSpread = require("./nonIterableSpread");
-
-function _toConsumableArray(arr) {
-  return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();
-}
-
-module.exports = _toConsumableArray;
-},{"./arrayWithoutHoles":"fk2o","./iterableToArray":"rp83","./unsupportedIterableToArray":"IOZJ","./nonIterableSpread":"v5FO"}],"fwsn":[function(require,module,exports) {
+},{"regenerator-runtime":"KA2S"}],"fwsn":[function(require,module,exports) {
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
   try {
     var info = gen[key](arg);
@@ -968,15 +1102,7 @@ function _asyncToGenerator(fn) {
 }
 
 module.exports = _asyncToGenerator;
-},{}],"ZBnv":[function(require,module,exports) {
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-module.exports = _classCallCheck;
-},{}],"Zxw8":[function(require,module,exports) {
+},{}],"BsCT":[function(require,module,exports) {
 "use strict";
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
@@ -1028,7 +1154,7 @@ var Point = function Point(x, y) {
 };
 
 exports.Point = Point;
-},{"@babel/runtime/helpers/classCallCheck":"ZBnv"}],"KaoL":[function(require,module,exports) {
+},{"@babel/runtime/helpers/classCallCheck":"ZBnv"}],"OIFl":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1038,7 +1164,7 @@ exports.CONFIG = void 0;
 
 var point_1 = require("./point");
 
-var SIZE = 40;
+var SIZE = 64;
 exports.CONFIG = {
   CHUNK_SIZE: 1,
   RENDER_DISTANCE: 4,
@@ -1047,12 +1173,32 @@ exports.CONFIG = {
   X_VERSOR: new point_1.Point(SIZE * Math.sqrt(3), 0),
   Y_VERSOR: new point_1.Point(SIZE * Math.sqrt(3) / 2, SIZE * 3 / 2)
 };
-},{"./point":"Zxw8"}],"Uazv":[function(require,module,exports) {
+},{"./point":"BsCT"}],"NoOd":[function(require,module,exports) {
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+module.exports = _createClass;
+},{}],"UQJg":[function(require,module,exports) {
 "use strict";
 
 var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1065,61 +1211,74 @@ var config_1 = require("./config");
 
 var point_1 = require("./point");
 
-var Hex = function Hex(x, y, z) {
-  var _this = this;
+var Hex = /*#__PURE__*/function () {
+  function Hex(x, y, z) {
+    var _this = this;
 
-  var gameObjects = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
-  (0, _classCallCheck2.default)(this, Hex);
+    var gameObjects = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
+    (0, _classCallCheck2.default)(this, Hex);
 
-  this.draw = function () {
-    var center = config_1.CONFIG.ORIGIN_POINT.translate(config_1.CONFIG.X_VERSOR.multiply(_this.position.x)).translate(config_1.CONFIG.Y_VERSOR.multiply(_this.position.y));
+    this.draw = function () {
+      var center = config_1.CONFIG.ORIGIN_POINT.translate(config_1.CONFIG.X_VERSOR.multiply(_this.position.x)).translate(config_1.CONFIG.Y_VERSOR.multiply(_this.position.y));
 
-    var points = _this.hexPoints(center, config_1.CONFIG.HEX_SIZE);
+      var points = _this.hexPoints(center, config_1.CONFIG.HEX_SIZE);
 
-    var g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
-    g.id = _this.position.valueOf();
-    g.innerHTML = "\n            <polygon points=\"".concat(points.join(' '), "\">\n                <title>").concat(JSON.stringify(_this, null, 4), "</title>\n            </polygon>\n            <text x=\"").concat(center.x, "\" y=\"").concat(center.y, "\" text-anchor=\"middle\" style=\"font-size:14px\">").concat(_this.position, "</text>\n            <text x=\"").concat(center.x, "\" y=\"").concat(center.y + 18, "\" text-anchor=\"middle\" style=\"font-size:12px;fill:gray\">").concat(_this.position.z, "</text>\n        ");
-    g.addEventListener("mousedown", function (e) {
-      e.preventDefault();
-      var button = e.buttons;
+      _this.g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+      _this.g.id = _this.position.valueOf();
+      _this.g.innerHTML = "\n            <polygon points=\"".concat(points.join(' '), "\">\n                <title>").concat(JSON.stringify(_this, null, 4), "</title>\n            </polygon>\n            <text x=\"").concat(center.x, "\" y=\"").concat(center.y + 40, "\" text-anchor=\"middle\" style=\"font-size:20px;fill:gray\">").concat(_this.position, "</text>\n            ").concat(_this.gameObjects.map(function (obj) {
+        return obj.draw(center);
+      }), "\n        ");
 
-      if (button === 1) {
-        var _document$querySelect;
+      _this.addEventSupport(_this.g);
 
-        console.log("LMB " + _this.position.valueOf());
-        (_document$querySelect = document.querySelector('[selected]')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.removeAttribute('selected');
-        g.setAttribute("selected", "true");
-      }
+      return _this.g;
+    };
 
-      if (button === 2) {
-        var _document$querySelect2;
+    this.distance = function (other) {
+      return _this.position.distance2D(other.position);
+    };
 
-        console.log("RMB " + _this.position.valueOf());
-        (_document$querySelect2 = document.querySelector('[selected]')) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.removeAttribute('selected');
-      }
-    });
-    return g;
-  };
+    this.hexPoints = function (center, size) {
+      return (0, _toConsumableArray2.default)(Array(6)).map(function (_, i) {
+        var angle_deg = 60 * i - 30;
+        var angle_rad = Math.PI / 180 * angle_deg;
+        return new point_1.Point(center.x + size * Math.cos(angle_rad), center.y + size * Math.sin(angle_rad));
+      });
+    };
 
-  this.hexPoints = function (center, size) {
-    return (0, _toConsumableArray2.default)(Array(6)).map(function (_, i) {
-      var angle_deg = 60 * i - 30;
-      var angle_rad = Math.PI / 180 * angle_deg;
-      return new point_1.Point(center.x + size * Math.cos(angle_rad), center.y + size * Math.sin(angle_rad));
-    });
-  };
+    this.position = new point_1.Point(x, y, z);
+    this.chunkPosition = new point_1.Point(Math.floor(this.position.x / config_1.CONFIG.CHUNK_SIZE), Math.floor(this.position.y / config_1.CONFIG.CHUNK_SIZE), z);
+    this.gameObjects = gameObjects;
+  }
 
-  this.distance = function (other) {
-    return _this.position.distance2D(other.position);
-  };
+  (0, _createClass2.default)(Hex, [{
+    key: "addEventSupport",
+    value: function addEventSupport(g) {
+      var _this2 = this;
 
-  this.position = new point_1.Point(x, y, z);
-  this.chunkPosition = new point_1.Point(Math.floor(this.position.x / config_1.CONFIG.CHUNK_SIZE), Math.floor(this.position.y / config_1.CONFIG.CHUNK_SIZE), z);
-  this.gameObjects = gameObjects;
-};
+      g.addEventListener("mousedown", function (e) {
+        e.preventDefault();
+        var button = e.buttons;
+
+        if (button === 1) {
+          var _this2$onSelected;
+
+          (_this2$onSelected = _this2.onSelected) === null || _this2$onSelected === void 0 ? void 0 : _this2$onSelected.call(_this2, _this2);
+        }
+
+        if (button === 2) {
+          var _this2$onDeselected;
+
+          (_this2$onDeselected = _this2.onDeselected) === null || _this2$onDeselected === void 0 ? void 0 : _this2$onDeselected.call(_this2, _this2);
+        }
+      });
+    }
+  }]);
+  return Hex;
+}();
 
 exports.Hex = Hex;
-},{"@babel/runtime/helpers/toConsumableArray":"YtCi","@babel/runtime/helpers/classCallCheck":"ZBnv","./config":"KaoL","./point":"Zxw8"}],"TM8K":[function(require,module,exports) {
+},{"@babel/runtime/helpers/toConsumableArray":"YtCi","@babel/runtime/helpers/classCallCheck":"ZBnv","@babel/runtime/helpers/createClass":"NoOd","./config":"OIFl","./point":"BsCT"}],"BTgH":[function(require,module,exports) {
 "use strict";
 
 var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
@@ -1129,7 +1288,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.HEX_NEIGHBOURS = exports.HEX_MOVE = exports.unique = exports.range = void 0;
+exports.HEX_MOVE = exports.unique = exports.range = void 0;
 
 var point_1 = require("./point");
 
@@ -1156,8 +1315,7 @@ exports.HEX_MOVE = {
   UP: new point_1.Point(0, 0, 1),
   DOWN: new point_1.Point(0, 0, -1)
 };
-exports.HEX_NEIGHBOURS = [exports.HEX_MOVE.RIGHT, exports.HEX_MOVE.LEFT, exports.HEX_MOVE.UPPER_RIGHT, exports.HEX_MOVE.UPPER_LEFT, exports.HEX_MOVE.LOWER_RIGHT, exports.HEX_MOVE.LOWER_LEFT];
-},{"@babel/runtime/helpers/toConsumableArray":"YtCi","./point":"Zxw8"}],"i4eX":[function(require,module,exports) {
+},{"@babel/runtime/helpers/toConsumableArray":"YtCi","./point":"BsCT"}],"GLYb":[function(require,module,exports) {
 "use strict";
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
@@ -1286,62 +1444,132 @@ var loadChunkDB = /*#__PURE__*/function () {
 }();
 
 exports.loadChunkDB = loadChunkDB;
-},{"@babel/runtime/regenerator":"m4eR","@babel/runtime/helpers/asyncToGenerator":"fwsn","./config":"KaoL","./hex":"Uazv","./point":"Zxw8","./utils":"TM8K"}],"e7Sb":[function(require,module,exports) {
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
+},{"@babel/runtime/regenerator":"m4eR","@babel/runtime/helpers/asyncToGenerator":"fwsn","./config":"OIFl","./hex":"UQJg","./point":"BsCT","./utils":"BTgH"}],"N3AR":[function(require,module,exports) {
+"use strict";
+
+var _construct2 = _interopRequireDefault(require("@babel/runtime/helpers/construct"));
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.unloadFromMap = exports.reloadHexes = exports.reloadHex = exports.loadIntoMap = void 0;
+
+var config_1 = require("./config");
+
+var mapProvider_1 = require("./mapProvider");
+
+var point_1 = require("./point");
+
+var utils_1 = require("./utils");
+
+function loadIntoMap(view) {
+  var origin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : config_1.CONFIG.ORIGIN_POINT;
+  var distance = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : config_1.CONFIG.RENDER_DISTANCE;
+  var futureChunks = utils_1.range(origin.x - distance, origin.x + distance + 1).flatMap(function (x) {
+    return utils_1.range(origin.y - distance, origin.y + distance + 1).map(function (y) {
+      return new point_1.Point(x, y, origin.z);
+    });
+  }).filter(function (chunk) {
+    return chunk.distance3D(origin) <= distance;
+  }).flatMap( /*#__PURE__*/function () {
+    var _ref = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(chunkPosition) {
+      var result, chunk, chunkDocument;
+      return _regenerator.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return mapProvider_1.loadChunk(chunkPosition);
+
+            case 2:
+              result = _context.sent;
+
+              if (result.length !== 0) {
+                chunk = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+                chunk.id = "chunk ".concat(chunkPosition.valueOf());
+                chunk.append.apply(chunk, (0, _toConsumableArray2.default)(result.map(function (h) {
+                  return h.draw();
+                })));
+                chunkDocument = document.createDocumentFragment();
+                chunkDocument.append(chunk);
+                view.append(chunkDocument);
+              }
+
+              return _context.abrupt("return", result);
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function (_x) {
+      return _ref.apply(this, arguments);
+    };
+  }());
+  return Promise.all(futureChunks).then(function (map) {
+    return map.flatMap(function (h) {
+      return h;
+    });
+  });
 }
 
-module.exports = _arrayWithHoles;
-},{}],"nyVk":[function(require,module,exports) {
-function _iterableToArrayLimit(arr, i) {
-  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
+exports.loadIntoMap = loadIntoMap;
 
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
+function reloadHex(view, hex) {
+  var rendered = hex.draw();
+  view.querySelector("#" + CSS.escape(hex.position.valueOf())).replaceWith(rendered);
+  return rendered;
+}
 
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
+exports.reloadHex = reloadHex;
+
+function reloadHexes(view) {
+  for (var _len = arguments.length, hexes = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    hexes[_key - 1] = arguments[_key];
   }
 
-  return _arr;
+  hexes.forEach(function (hex) {
+    return reloadHex(view, hex);
+  });
 }
 
-module.exports = _iterableToArrayLimit;
-},{}],"yJnk":[function(require,module,exports) {
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+exports.reloadHexes = reloadHexes;
+
+function unloadFromMap(view, map) {
+  var origin = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : config_1.CONFIG.ORIGIN_POINT;
+  var distance = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : config_1.CONFIG.RENDER_DISTANCE * 2;
+  return Promise.all((0, _toConsumableArray2.default)(map.values()).filter(function (hex) {
+    return hex.chunkPosition.distance3D(origin) > distance;
+  }).map(function (hex) {
+    var id = hex.position.valueOf();
+    map.delete(id);
+    return 'chunk ' + hex.chunkPosition.valueOf();
+  }).filter(utils_1.unique).map(function (chunkId) {
+    view.querySelector('#' + CSS.escape(chunkId)).remove();
+    var chunk = pointFromChunkId(chunkId);
+    mapProvider_1.unloadChunk(chunk);
+  }));
 }
 
-module.exports = _nonIterableRest;
-},{}],"xw6J":[function(require,module,exports) {
-var arrayWithHoles = require("./arrayWithHoles");
+exports.unloadFromMap = unloadFromMap;
 
-var iterableToArrayLimit = require("./iterableToArrayLimit");
-
-var unsupportedIterableToArray = require("./unsupportedIterableToArray");
-
-var nonIterableRest = require("./nonIterableRest");
-
-function _slicedToArray(arr, i) {
-  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || unsupportedIterableToArray(arr, i) || nonIterableRest();
+function pointFromChunkId(chunkId) {
+  return (0, _construct2.default)(point_1.Point, (0, _toConsumableArray2.default)(chunkId.slice(6).split(', ').map(function (i) {
+    return parseInt(i);
+  })));
 }
-
-module.exports = _slicedToArray;
-},{"./arrayWithHoles":"e7Sb","./iterableToArrayLimit":"nyVk","./unsupportedIterableToArray":"IOZJ","./nonIterableRest":"yJnk"}],"xn6Y":[function(require,module,exports) {
+},{"@babel/runtime/helpers/construct":"XsAw","@babel/runtime/regenerator":"m4eR","@babel/runtime/helpers/toConsumableArray":"YtCi","@babel/runtime/helpers/asyncToGenerator":"fwsn","./config":"OIFl","./mapProvider":"GLYb","./point":"BsCT","./utils":"BTgH"}],"yevO":[function(require,module,exports) {
 "use strict";
 
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
@@ -1401,22 +1629,22 @@ var applyPanCapability = function applyPanCapability(view) {
     e.stopPropagation();
 
     if (e.buttons === 2) {
-      var transform = view.attributes.getNamedItem('transform');
+      var transform = view.firstElementChild.attributes.getNamedItem('transform');
 
       var _getTranslate = getTranslate(transform),
           _getTranslate2 = (0, _slicedToArray2.default)(_getTranslate, 2),
           x = _getTranslate2[0],
           y = _getTranslate2[1];
 
-      var _view$parentElement$g = view.parentElement.getAttribute('viewBox').split(' ').slice(2).map(function (e) {
+      var _view$getAttribute$sp = view.getAttribute('viewBox').split(' ').slice(2).map(function (e) {
         return parseInt(e);
       }),
-          _view$parentElement$g2 = (0, _slicedToArray2.default)(_view$parentElement$g, 2),
-          viewX = _view$parentElement$g2[0],
-          viewY = _view$parentElement$g2[1];
+          _view$getAttribute$sp2 = (0, _slicedToArray2.default)(_view$getAttribute$sp, 2),
+          viewX = _view$getAttribute$sp2[0],
+          viewY = _view$getAttribute$sp2[1];
 
-      var screenX = view.parentElement.getBoundingClientRect().width;
-      var screenY = view.parentElement.getBoundingClientRect().height;
+      var screenX = view.getBoundingClientRect().width;
+      var screenY = view.getBoundingClientRect().height;
       var mouseX = e.movementX * viewX / screenX;
       var mouseY = e.movementY * viewY / screenY;
       setTranslate(transform, x + mouseX, y + mouseY);
@@ -1430,21 +1658,21 @@ var applyZoomCapability = function applyZoomCapability(view, minZoom, maxZoom, s
   view.addEventListener('wheel', function (e) {
     e.preventDefault();
     e.stopPropagation();
-    var transform = view.attributes.getNamedItem('transform');
+    var transform = view.firstElementChild.attributes.getNamedItem('transform');
     var zoom = getZoom(transform);
     var deltaZoom = Math.sign(e.deltaY) * step;
     var newZoom = Math.min(maxZoom, Math.max(minZoom, zoom - deltaZoom));
     setZoom(transform, newZoom);
 
-    var _view$parentElement$g3 = view.parentElement.getAttribute('viewBox').split(' ').slice(2).map(function (e) {
+    var _view$getAttribute$sp3 = view.getAttribute('viewBox').split(' ').slice(2).map(function (e) {
       return parseInt(e);
     }),
-        _view$parentElement$g4 = (0, _slicedToArray2.default)(_view$parentElement$g3, 2),
-        viewX = _view$parentElement$g4[0],
-        viewY = _view$parentElement$g4[1];
+        _view$getAttribute$sp4 = (0, _slicedToArray2.default)(_view$getAttribute$sp3, 2),
+        viewX = _view$getAttribute$sp4[0],
+        viewY = _view$getAttribute$sp4[1];
 
-    var screenX = view.parentElement.getBoundingClientRect().width;
-    var screenY = view.parentElement.getBoundingClientRect().height;
+    var screenX = view.getBoundingClientRect().width;
+    var screenY = view.getBoundingClientRect().height;
     var mouseX = e.x * viewX / screenX;
     var mouseY = e.y * viewY / screenY;
 
@@ -1462,14 +1690,15 @@ var applyZoomCapability = function applyZoomCapability(view, minZoom, maxZoom, s
 exports.applyZoomCapability = applyZoomCapability;
 
 var applyRotateCapability = function applyRotateCapability(view) {
+  var rotateStepDeg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 45;
   view.addEventListener('mousedown', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
     if (e.buttons === 4) {
-      var transform = view.attributes.getNamedItem('transform');
+      var transform = view.firstElementChild.attributes.getNamedItem('transform');
       var rotate = getRotate(transform);
-      setRotate(transform, rotate + 45);
+      setRotate(transform, rotate + rotateStepDeg);
     }
   });
 };
@@ -1504,14 +1733,12 @@ function setRotate(transform, deg) {
   var rotate = "rotate(".concat(deg, ")");
   transform.value = transform.value.replace(ROTATE_REGEXP, rotate);
 }
-},{"@babel/runtime/helpers/slicedToArray":"xw6J","./config":"KaoL","./point":"Zxw8"}],"KmWJ":[function(require,module,exports) {
+},{"@babel/runtime/helpers/slicedToArray":"xw6J","./config":"OIFl","./point":"BsCT"}],"KmWJ":[function(require,module,exports) {
 "use strict";
 
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
 
 var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
-
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1519,98 +1746,101 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var config_1 = require("./config");
+var TestObject_1 = require("./game/TestObject");
 
-var mapProvider_1 = require("./mapProvider");
+var mapLoader_1 = require("./world/mapLoader");
 
-var point_1 = require("./point");
-
-var utils_1 = require("./utils");
-
-var viewCapabilities_1 = require("./viewCapabilities");
+var viewCapabilities_1 = require("./world/viewCapabilities");
 
 var map = new Map();
 var view = document.querySelector('#view');
 viewCapabilities_1.preventContextMenuCapability(view);
 viewCapabilities_1.applyPanCapability(view);
 viewCapabilities_1.applyZoomCapability(view, 0.3, 2.0, 0.1);
-viewCapabilities_1.applyRotateCapability(view); // applyOriginChangeCapability(view, async newOrigin => {
-//     console.log('origin', newOrigin.valueOf())
-//     await loadIntoMap(newOrigin)
-//     await unloadFromMap(newOrigin)
-// })
+viewCapabilities_1.applyRotateCapability(view, 30);
+mapLoader_1.loadIntoMap(view.firstElementChild).then(function (hexes) {
+  return hexes.forEach(function (h) {
+    map.set(h.position.valueOf(), h);
+    h.onSelected = handleHexSelection;
+    h.onDeselected = handleHexDeselection;
+  });
+}).then(function () {
+  (0, _toConsumableArray2.default)(map).filter(function (_ref) {
+    var _ref2 = (0, _slicedToArray2.default)(_ref, 2),
+        hexId = _ref2[0],
+        _ = _ref2[1];
 
-loadIntoMap(config_1.CONFIG.ORIGIN_POINT);
+    return ["3, 0, 0", "0, 3, 0", "-3, 0, 0", "0, -3, 0", "3, -3, 0", "-3, 3, 0"].includes(hexId);
+  }).forEach(function (_ref3) {
+    var _ref4 = (0, _slicedToArray2.default)(_ref3, 2),
+        _ = _ref4[0],
+        hex = _ref4[1];
 
-function loadIntoMap(origin) {
-  var distance = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : config_1.CONFIG.RENDER_DISTANCE;
-  utils_1.range(origin.x - distance, origin.x + distance + 1).flatMap(function (x) {
-    return utils_1.range(origin.y - distance, origin.y + distance + 1).map(function (y) {
-      return new point_1.Point(x, y, origin.z);
+    hex.gameObjects.push(new TestObject_1.TestObject());
+    mapLoader_1.reloadHex(view, hex);
+  });
+});
+
+function handleHexSelection(hex) {
+  console.log("LMB " + hex.position.valueOf());
+  var activeHex = Array.from(map.values()).find(function (hex) {
+    return hex.g.hasAttribute("selected");
+  });
+
+  if (activeHex) {
+    if (activeHex === hex) {
+      handleHexDeselection(hex);
+    } else if (hex.g.hasAttribute("available")) {
+      moveGameObjects(activeHex, hex);
+    } else {
+      activeHex.g.removeAttribute("selected");
+      clearAttribute("available");
+      activateHex(hex);
+    }
+  } else {
+    activateHex(hex);
+  }
+}
+
+function handleHexDeselection(hex) {
+  var _document$querySelect;
+
+  console.log("RMB " + hex.position.valueOf());
+  (_document$querySelect = document.querySelector('[selected]')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.removeAttribute('selected');
+  Array.from(map.values()).forEach(function (hex) {
+    return hex.g.removeAttribute("available");
+  });
+}
+
+function moveGameObjects(from, to) {
+  var _to$gameObjects;
+
+  (_to$gameObjects = to.gameObjects).push.apply(_to$gameObjects, (0, _toConsumableArray2.default)(from.gameObjects));
+
+  from.gameObjects = [];
+  mapLoader_1.reloadHexes(view, to, from);
+  clearAttribute("available");
+}
+
+function clearAttribute(attr) {
+  Array.from(map.values()).forEach(function (hex) {
+    return hex.g.removeAttribute(attr);
+  });
+}
+
+function activateHex(hex) {
+  var _hex$g;
+
+  (_hex$g = hex.g) === null || _hex$g === void 0 ? void 0 : _hex$g.setAttribute("selected", "true");
+
+  if (hex.gameObjects.length !== 0) {
+    Array.from(map.values()).filter(function (h) {
+      var distance = h.distance(hex);
+      return distance > 0 && distance <= 2 && h.gameObjects.length === 0;
+    }).forEach(function (h) {
+      return h.g.setAttribute("available", "true");
     });
-  }).filter(function (chunk) {
-    return chunk.distance3D(origin) <= distance;
-  }).forEach( /*#__PURE__*/function () {
-    var _ref = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(chunkPosition) {
-      var result, chunk, chunkDocument;
-      return _regenerator.default.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return mapProvider_1.loadChunk(chunkPosition);
-
-            case 2:
-              result = _context.sent;
-
-              if (result.length !== 0) {
-                result.forEach(function (h) {
-                  return map.set(h.position.valueOf(), h);
-                });
-                chunk = document.createElementNS("http://www.w3.org/2000/svg", 'g');
-                chunk.id = "chunk ".concat(chunkPosition.valueOf());
-                chunk.append.apply(chunk, (0, _toConsumableArray2.default)(result.map(function (h) {
-                  return h.draw();
-                })));
-                chunkDocument = document.createDocumentFragment();
-                chunkDocument.append(chunk);
-                view.append(chunkDocument);
-              }
-
-            case 4:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-
-    return function (_x) {
-      return _ref.apply(this, arguments);
-    };
-  }());
-} // function unloadFromMap(origin: Point, distance: number = CONFIG.RENDER_DISTANCE * 2) {
-//     return Promise.all(
-//         [...map.values()]
-//         .filter(hex => hex.chunkPosition.distance3D(origin) > distance)
-//         .map(hex => {
-//             const id = hex.position.valueOf()
-//             map.delete(id)
-//             return 'chunk ' + hex.chunkPosition.valueOf()
-//         })
-//         .filter(unique)
-//         .map(chunkId => {
-//             view.querySelector('#' + CSS.escape(chunkId))!.remove()
-//             const chunk = pointFromChunkId(chunkId)
-//             unloadChunk(chunk)
-//         })
-//     )
-// }
-// function pointFromChunkId(chunkId: string) {
-//     return new Point(...chunkId
-//         .slice(6)
-//         .split(', ')
-//         .map(i => parseInt(i)) as [number, number, number])
-// }
-},{"@babel/runtime/regenerator":"m4eR","@babel/runtime/helpers/toConsumableArray":"YtCi","@babel/runtime/helpers/asyncToGenerator":"fwsn","./config":"KaoL","./mapProvider":"i4eX","./point":"Zxw8","./utils":"TM8K","./viewCapabilities":"xn6Y"}]},{},["KmWJ"], null)
-//# sourceMappingURL=/main.1ff86059.js.map
+  }
+}
+},{"@babel/runtime/helpers/slicedToArray":"xw6J","@babel/runtime/helpers/toConsumableArray":"YtCi","./game/TestObject":"iIt7","./world/mapLoader":"N3AR","./world/viewCapabilities":"yevO"}]},{},["KmWJ"], null)
+//# sourceMappingURL=/main.c391e1cf.js.map
