@@ -6,44 +6,91 @@
     <title>MMO</title>
 </head>
 
-<body style="margin:0">
-    <svg id="view" width="auto" height="99vh" preserveAspectRatio="none" viewBox="0 0 1200 800" style="border-bottom: 5px groove darkgray; border-right: 5px groove darkgray; float: left;">
-        <g id="world" transform="translate(600 400) scale(0.75) rotate(0)">
-            <style>polygon {
-                    fill: lightgray;
-                    stroke: black;
-                    stroke-width: 1.5;
-                }
-                #world g g:hover polygon {
-                    fill: azure;
-                }
-                #world g[selected] polygon {
-                    fill: lightskyblue;
-                }
-                #world g[selected]:hover polygon {
-                    fill: lavender;
-                }
-                #world g[available] polygon {
-                    fill: lightyellow;
-                }
-                #world g[available]:hover polygon {
-                    fill: lightgreen;
-                }</style>
-        </g>
-    </svg>
-    <div>
-        <style>.main-panel {
-                float: right;
-                margin: 2.5em;
-                padding: 1em;
+<body style="margin:0; display: flex;">
+    <div style="flex: 5">
+        <svg id="view" width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 1200 800" style="border-bottom: 5px groove darkgray; border-right: 5px groove darkgray; float: left;">
+            <g id="world" transform="translate(600 400) scale(0.75) rotate(0)">
+                <style>polygon {
+                        fill: lightgray;
+                        stroke: black;
+                        stroke-width: 1.5;
+                    }
+                    #world g g:hover polygon {
+                        fill: azure;
+                    }
+                    #world g[selected] polygon {
+                        fill: lightskyblue;
+                    }
+                    #world g[selected]:hover polygon {
+                        fill: lavender;
+                    }
+                    #world g[available] polygon {
+                        fill: lightyellow;
+                    }
+                    #world g[available]:hover polygon {
+                        fill: lightgreen;
+                    }</style>
+            </g>
+        </svg>
+    </div>
+    
+    <div style="flex: 2; display: flex; flex-flow: column; align-items: stretch;">
+        <style>.border {
+                border: 1px solid darkgray;
+                border-radius: 5px;
             }
             .panel {
-                width: 20%;
-                border: 1px ridge darkgray;
+                padding: 1rem;
+                margin: 1rem;
+            }
+            action-card {
+                visibility: hidden;
+            }
+            input:hover + action-card {
+                visibility: visible;
+            }
+            .card {
+                width: 15rem;
+                height: 21rem;
+                display: flex;
+                margin: 1em;
+                padding: 0.4em;
+                border-radius: 10px;
+                background-color: rgb(99, 99, 99);
+
+                position: absolute;
+                z-index: 1;
+                left: -17.5rem;
+                top: -10.7rem;
+            }
+            .inner-card {
                 border-radius: 5px;
+                padding: 0.5em;
+                background-color: white;
+                display: flex;
+                flex-flow: column nowrap;
+                flex: 1;
+            }
+            .card-headline {
+                padding-left: 0.5em;
+                padding-right: 0.5em;
+                padding-bottom: 2px;
+                flex: 0 0;
+                display: flex;
+                justify-content: space-between;
+            }
+            .card-arrow {
+                height: 8px;
+                width: 8px;
+
+                background-color: inherit;
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform: translate(50%, -50%) rotate(45deg) translateX(1px);
             }</style>
-        <div class="main-panel panel">
-            <h1 style="text-align: center;">Control panel</h1>
+        <div class="border panel" style="flex: 1;">
+            <h2 style="text-align: center;">Control panel</h2>
             <div>
                 <div>LMB: select</div>
                 <div>RMB: pan/deselect</div>
@@ -51,8 +98,42 @@
                 <div>Wheel: zoom</div>
             </div>
         </div>
+        <div style="flex: 3;">
+            <div style="float: right; width: 70%;">
+                <div class="border panel" style="display: flex; flex-flow: column nowrap;">
+                    <h2 style="text-align: center;">Hand</h2>
+                    <div style="display: flex; position: relative;">
+                        <input type="button" value="card" style="flex: 1; padding: 0.7rem;">
+                        <action-card name="kappa" cost="milion dolarów" type="Creature - human dissapointment" text="Win the game">
+                        </action-card>
+                    </div>
+                    <div style="display: flex; position: relative;">
+                        <input type="button" value="card" style="flex: 1; padding: 0.7rem;">
+                        <action-card name="kappa" cost="milion dolarów" type="Creature - human dissapointment" text="Win the game">
+                        </action-card>
+                    </div>
+                    <div style="display: flex; position: relative;">
+                        <input type="button" value="card" style="flex: 1; padding: 0.7rem;">
+                        <action-card name="kappa" cost="milion dolarów" type="Creature - human dissapointment" text="Win the game">
+                        </action-card>
+                    </div>
+                    <div style="display: flex; position: relative;">
+                        <input class="le" type="button" value="card" style="flex: 1; padding: 0.7rem;">
+                        <action-card name="kappa" cost="milion dolarów" type="Creature - human dissapointment" text="Win the game">
+                        </action-card>
+                    </div>
+                    <div style="display: flex; position: relative;">
+                        <input class="le" type="button" value="card" style="flex: 1; padding: 0.7rem;">
+                        <action-card name="kappa" cost="milion dolarów" type="Creature - human dissapointment" text="Win the game">
+                        </action-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </div>
     <script src="/main.c391e1cf.js"></script>
+    <script src="/ActionCard.503c61fb.js"></script>
 </body>
 
 </html>
