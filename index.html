@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>MMO</title>
+    <title>Boardgame</title>
 </head>
 
 <body style="margin:0; display: flex;">
@@ -35,6 +35,22 @@
     </div>
     
     <div style="flex: 2; display: flex; flex-flow: column; align-items: stretch;">
+        <div class="border panel" style="flex: 1;">
+            <h2 style="text-align: center;">Control panel</h2>
+            <div>
+                <div>LMB: select</div>
+                <div>RMB: pan/deselect</div>
+                <div>MMB: rotate</div>
+                <div>Wheel: zoom</div>
+            </div>
+        </div>
+        <div style="flex: 3;">
+            <div style="float: right; width: 70%;">
+                <div id="hand" class="border panel" style="display: flex; flex-flow: column nowrap;">
+                    <h2 style="text-align: center;">Hand</h2>
+                </div>
+            </div>
+        </div>
         <style>.border {
                 border: 1px solid darkgray;
                 border-radius: 5px;
@@ -43,11 +59,47 @@
                 padding: 1rem;
                 margin: 1rem;
             }
-            action-card {
+            card-visualization {
                 visibility: hidden;
             }
-            input:hover + action-card {
+            button:hover + card-visualization {
                 visibility: visible;
+            }
+            .card-active card-visualization {
+                visibility: visible;
+            }
+            @keyframes action-card-keyframes {
+                0% {
+                    opacity: 0;
+                    top: 4rem;
+                }
+                100% {
+                    opacity: 1;
+                    top: 0rem;
+                }
+            }
+            action-card {
+                position: relative;
+                animation-name: action-card-keyframes;
+                animation-duration: 400ms;
+                animation-timing-function: ease-out;
+                animation-fill-mode: forwards;
+            }
+            @keyframes action-card-discard {
+                0% {
+                    opacity: 1;
+                    right: 0rem;
+                }
+                100% {
+                    opacity: 0;
+                    right: 6rem;
+                }
+            }
+            .action-card-discard {
+                animation-name: action-card-discard;
+                animation-duration: 400ms;
+                animation-timing-function: ease-out;
+                animation-fill-mode: forwards;
             }
             .card {
                 width: 15rem;
@@ -88,52 +140,17 @@
                 right: 0;
                 top: 50%;
                 transform: translate(50%, -50%) rotate(45deg) translateX(1px);
+            }
+            .card-active button {
+                background-color: azure;
+                border-color: lightskyblue;
+                border-radius: 5px;
+            }
+            .card-inactive button {
+                pointer-events: none;
             }</style>
-        <div class="border panel" style="flex: 1;">
-            <h2 style="text-align: center;">Control panel</h2>
-            <div>
-                <div>LMB: select</div>
-                <div>RMB: pan/deselect</div>
-                <div>MMB: rotate</div>
-                <div>Wheel: zoom</div>
-            </div>
-        </div>
-        <div style="flex: 3;">
-            <div style="float: right; width: 70%;">
-                <div class="border panel" style="display: flex; flex-flow: column nowrap;">
-                    <h2 style="text-align: center;">Hand</h2>
-                    <div style="display: flex; position: relative;">
-                        <input type="button" value="card" style="flex: 1; padding: 0.7rem;">
-                        <action-card name="kappa" cost="milion dolarów" type="Creature - human dissapointment" text="Win the game">
-                        </action-card>
-                    </div>
-                    <div style="display: flex; position: relative;">
-                        <input type="button" value="card" style="flex: 1; padding: 0.7rem;">
-                        <action-card name="kappa" cost="milion dolarów" type="Creature - human dissapointment" text="Win the game">
-                        </action-card>
-                    </div>
-                    <div style="display: flex; position: relative;">
-                        <input type="button" value="card" style="flex: 1; padding: 0.7rem;">
-                        <action-card name="kappa" cost="milion dolarów" type="Creature - human dissapointment" text="Win the game">
-                        </action-card>
-                    </div>
-                    <div style="display: flex; position: relative;">
-                        <input class="le" type="button" value="card" style="flex: 1; padding: 0.7rem;">
-                        <action-card name="kappa" cost="milion dolarów" type="Creature - human dissapointment" text="Win the game">
-                        </action-card>
-                    </div>
-                    <div style="display: flex; position: relative;">
-                        <input class="le" type="button" value="card" style="flex: 1; padding: 0.7rem;">
-                        <action-card name="kappa" cost="milion dolarów" type="Creature - human dissapointment" text="Win the game">
-                        </action-card>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
     </div>
-    <script src="/main.c391e1cf.js"></script>
-    <script src="/ActionCard.503c61fb.js"></script>
+    <script src="/main.da8d25c0.js"></script>
 </body>
 
 </html>

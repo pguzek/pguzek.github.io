@@ -117,200 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"e7Sb":[function(require,module,exports) {
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-
-module.exports = _arrayWithHoles;
-},{}],"nyVk":[function(require,module,exports) {
-function _iterableToArrayLimit(arr, i) {
-  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-
-module.exports = _iterableToArrayLimit;
-},{}],"ixeg":[function(require,module,exports) {
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
-
-  return arr2;
-}
-
-module.exports = _arrayLikeToArray;
-},{}],"IOZJ":[function(require,module,exports) {
-var arrayLikeToArray = require("./arrayLikeToArray");
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
-}
-
-module.exports = _unsupportedIterableToArray;
-},{"./arrayLikeToArray":"ixeg"}],"yJnk":[function(require,module,exports) {
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-
-module.exports = _nonIterableRest;
-},{}],"xw6J":[function(require,module,exports) {
-var arrayWithHoles = require("./arrayWithHoles");
-
-var iterableToArrayLimit = require("./iterableToArrayLimit");
-
-var unsupportedIterableToArray = require("./unsupportedIterableToArray");
-
-var nonIterableRest = require("./nonIterableRest");
-
-function _slicedToArray(arr, i) {
-  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || unsupportedIterableToArray(arr, i) || nonIterableRest();
-}
-
-module.exports = _slicedToArray;
-},{"./arrayWithHoles":"e7Sb","./iterableToArrayLimit":"nyVk","./unsupportedIterableToArray":"IOZJ","./nonIterableRest":"yJnk"}],"fk2o":[function(require,module,exports) {
-var arrayLikeToArray = require("./arrayLikeToArray");
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return arrayLikeToArray(arr);
-}
-
-module.exports = _arrayWithoutHoles;
-},{"./arrayLikeToArray":"ixeg"}],"rp83":[function(require,module,exports) {
-function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
-}
-
-module.exports = _iterableToArray;
-},{}],"v5FO":[function(require,module,exports) {
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-
-module.exports = _nonIterableSpread;
-},{}],"YtCi":[function(require,module,exports) {
-var arrayWithoutHoles = require("./arrayWithoutHoles");
-
-var iterableToArray = require("./iterableToArray");
-
-var unsupportedIterableToArray = require("./unsupportedIterableToArray");
-
-var nonIterableSpread = require("./nonIterableSpread");
-
-function _toConsumableArray(arr) {
-  return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();
-}
-
-module.exports = _toConsumableArray;
-},{"./arrayWithoutHoles":"fk2o","./iterableToArray":"rp83","./unsupportedIterableToArray":"IOZJ","./nonIterableSpread":"v5FO"}],"ZBnv":[function(require,module,exports) {
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-module.exports = _classCallCheck;
-},{}],"iIt7":[function(require,module,exports) {
-"use strict";
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.TestObject = void 0;
-
-var TestObject = function TestObject() {
-  (0, _classCallCheck2.default)(this, TestObject);
-
-  this.draw = function (origin) {
-    var size = 32;
-    return "\n            <svg x=".concat(origin.x - size / 2, " y=").concat(origin.y - size / 2, " width=\"").concat(size, "\" height=\"").concat(size, "\" viewbox=\"0 0 ").concat(size, " ").concat(size, "\">\n                <path d=\"M28.623,25c-0.722-1.938-2.388-3.365-4.005-4.751c-1.1-0.942-2.138-1.833-2.786-2.804\n                c-0.704-1.056-1.236-2.747-1.549-4.915c2.061-1.593,3.097-4.201,2.589-6.883c-0.53-2.797-2.804-5.042-5.607-5.536\n                C12.85-0.666,9,2.726,9,7c0,2.185,1.005,4.208,2.717,5.531c-0.313,2.167-0.845,3.859-1.549,4.915\n                c-0.647,0.971-1.686,1.861-2.786,2.804C5.765,21.635,4.099,23.062,3.377,25H2c-0.552,0-1,0.448-1,1v5c0,0.552,0.448,1,1,1h28\n                c0.552,0,1-0.448,1-1v-5c0-0.552-0.448-1-1-1H28.623z M11,7c0-1.331,0.491-2.632,1.305-3.626c1.017-1.01,2.351-1.686,3.695-1.686\n                c0.986,0,1.944,0.331,2.771,0.877C20.113,3.58,21,5.267,21,7c0,2.757-2.243,5-5,5S11,9.757,11,7z M8.684,21.768\n                c1.154-0.989,2.348-2.012,3.148-3.213c0.909-1.364,1.545-3.387,1.897-6.003C14.43,12.839,15.196,13,16,13s1.57-0.161,2.271-0.448\n                c0.353,2.616,0.988,4.639,1.897,6.003c0.8,1.201,1.994,2.224,3.148,3.213c1.58,1.354,3.063,2.639,3.518,4.232H5.165\n                C5.62,24.406,7.104,23.121,8.684,21.768z M29,30H3v-3h26V30z\"/>\n            </svg>\n        ");
-  };
-};
-
-exports.TestObject = TestObject;
-},{"@babel/runtime/helpers/classCallCheck":"ZBnv"}],"Jibl":[function(require,module,exports) {
-function _setPrototypeOf(o, p) {
-  module.exports = _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
-
-  return _setPrototypeOf(o, p);
-}
-
-module.exports = _setPrototypeOf;
-},{}],"v5KI":[function(require,module,exports) {
-function _isNativeReflectConstruct() {
-  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-  if (Reflect.construct.sham) return false;
-  if (typeof Proxy === "function") return true;
-
-  try {
-    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-module.exports = _isNativeReflectConstruct;
-},{}],"XsAw":[function(require,module,exports) {
-var setPrototypeOf = require("./setPrototypeOf");
-
-var isNativeReflectConstruct = require("./isNativeReflectConstruct");
-
-function _construct(Parent, args, Class) {
-  if (isNativeReflectConstruct()) {
-    module.exports = _construct = Reflect.construct;
-  } else {
-    module.exports = _construct = function _construct(Parent, args, Class) {
-      var a = [null];
-      a.push.apply(a, args);
-      var Constructor = Function.bind.apply(Parent, a);
-      var instance = new Constructor();
-      if (Class) setPrototypeOf(instance, Class.prototype);
-      return instance;
-    };
-  }
-
-  return _construct.apply(null, arguments);
-}
-
-module.exports = _construct;
-},{"./setPrototypeOf":"Jibl","./isNativeReflectConstruct":"v5KI"}],"KA2S":[function(require,module,exports) {
+})({"KA2S":[function(require,module,exports) {
 var define;
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
@@ -1102,7 +909,445 @@ function _asyncToGenerator(fn) {
 }
 
 module.exports = _asyncToGenerator;
-},{}],"BsCT":[function(require,module,exports) {
+},{}],"ixeg":[function(require,module,exports) {
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+
+  return arr2;
+}
+
+module.exports = _arrayLikeToArray;
+},{}],"fk2o":[function(require,module,exports) {
+var arrayLikeToArray = require("./arrayLikeToArray");
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return arrayLikeToArray(arr);
+}
+
+module.exports = _arrayWithoutHoles;
+},{"./arrayLikeToArray":"ixeg"}],"rp83":[function(require,module,exports) {
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+}
+
+module.exports = _iterableToArray;
+},{}],"IOZJ":[function(require,module,exports) {
+var arrayLikeToArray = require("./arrayLikeToArray");
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
+}
+
+module.exports = _unsupportedIterableToArray;
+},{"./arrayLikeToArray":"ixeg"}],"v5FO":[function(require,module,exports) {
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+module.exports = _nonIterableSpread;
+},{}],"YtCi":[function(require,module,exports) {
+var arrayWithoutHoles = require("./arrayWithoutHoles");
+
+var iterableToArray = require("./iterableToArray");
+
+var unsupportedIterableToArray = require("./unsupportedIterableToArray");
+
+var nonIterableSpread = require("./nonIterableSpread");
+
+function _toConsumableArray(arr) {
+  return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();
+}
+
+module.exports = _toConsumableArray;
+},{"./arrayWithoutHoles":"fk2o","./iterableToArray":"rp83","./unsupportedIterableToArray":"IOZJ","./nonIterableSpread":"v5FO"}],"ZBnv":[function(require,module,exports) {
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+module.exports = _classCallCheck;
+},{}],"Jibl":[function(require,module,exports) {
+function _setPrototypeOf(o, p) {
+  module.exports = _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+module.exports = _setPrototypeOf;
+},{}],"qngw":[function(require,module,exports) {
+var setPrototypeOf = require("./setPrototypeOf");
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) setPrototypeOf(subClass, superClass);
+}
+
+module.exports = _inherits;
+},{"./setPrototypeOf":"Jibl"}],"LNzP":[function(require,module,exports) {
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    module.exports = _typeof = function _typeof(obj) {
+      return typeof obj;
+    };
+  } else {
+    module.exports = _typeof = function _typeof(obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof(obj);
+}
+
+module.exports = _typeof;
+},{}],"VmQe":[function(require,module,exports) {
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+module.exports = _assertThisInitialized;
+},{}],"GFCP":[function(require,module,exports) {
+var _typeof = require("@babel/runtime/helpers/typeof");
+
+var assertThisInitialized = require("./assertThisInitialized");
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (_typeof(call) === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return assertThisInitialized(self);
+}
+
+module.exports = _possibleConstructorReturn;
+},{"@babel/runtime/helpers/typeof":"LNzP","./assertThisInitialized":"VmQe"}],"WQgz":[function(require,module,exports) {
+function _getPrototypeOf(o) {
+  module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+module.exports = _getPrototypeOf;
+},{}],"NoOd":[function(require,module,exports) {
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+module.exports = _createClass;
+},{}],"eaYI":[function(require,module,exports) {
+function _isNativeFunction(fn) {
+  return Function.toString.call(fn).indexOf("[native code]") !== -1;
+}
+
+module.exports = _isNativeFunction;
+},{}],"v5KI":[function(require,module,exports) {
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+module.exports = _isNativeReflectConstruct;
+},{}],"XsAw":[function(require,module,exports) {
+var setPrototypeOf = require("./setPrototypeOf");
+
+var isNativeReflectConstruct = require("./isNativeReflectConstruct");
+
+function _construct(Parent, args, Class) {
+  if (isNativeReflectConstruct()) {
+    module.exports = _construct = Reflect.construct;
+  } else {
+    module.exports = _construct = function _construct(Parent, args, Class) {
+      var a = [null];
+      a.push.apply(a, args);
+      var Constructor = Function.bind.apply(Parent, a);
+      var instance = new Constructor();
+      if (Class) setPrototypeOf(instance, Class.prototype);
+      return instance;
+    };
+  }
+
+  return _construct.apply(null, arguments);
+}
+
+module.exports = _construct;
+},{"./setPrototypeOf":"Jibl","./isNativeReflectConstruct":"v5KI"}],"C2vW":[function(require,module,exports) {
+var getPrototypeOf = require("./getPrototypeOf");
+
+var setPrototypeOf = require("./setPrototypeOf");
+
+var isNativeFunction = require("./isNativeFunction");
+
+var construct = require("./construct");
+
+function _wrapNativeSuper(Class) {
+  var _cache = typeof Map === "function" ? new Map() : undefined;
+
+  module.exports = _wrapNativeSuper = function _wrapNativeSuper(Class) {
+    if (Class === null || !isNativeFunction(Class)) return Class;
+
+    if (typeof Class !== "function") {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
+    if (typeof _cache !== "undefined") {
+      if (_cache.has(Class)) return _cache.get(Class);
+
+      _cache.set(Class, Wrapper);
+    }
+
+    function Wrapper() {
+      return construct(Class, arguments, getPrototypeOf(this).constructor);
+    }
+
+    Wrapper.prototype = Object.create(Class.prototype, {
+      constructor: {
+        value: Wrapper,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    return setPrototypeOf(Wrapper, Class);
+  };
+
+  return _wrapNativeSuper(Class);
+}
+
+module.exports = _wrapNativeSuper;
+},{"./getPrototypeOf":"WQgz","./setPrototypeOf":"Jibl","./isNativeFunction":"eaYI","./construct":"XsAw"}],"JTdc":[function(require,module,exports) {
+"use strict";
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _wrapNativeSuper2 = _interopRequireDefault(require("@babel/runtime/helpers/wrapNativeSuper"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.GameComponent = void 0;
+
+var GameComponent = /*#__PURE__*/function (_HTMLElement) {
+  (0, _inherits2.default)(GameComponent, _HTMLElement);
+
+  var _super = _createSuper(GameComponent);
+
+  function GameComponent() {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, GameComponent);
+    _this = _super.call(this);
+    _this.componentAttributes = {};
+
+    _this.render = function () {
+      return "";
+    };
+
+    _this.innerHTML = _this.render();
+    return _this;
+  }
+
+  (0, _createClass2.default)(GameComponent, [{
+    key: "attributeChangedCallback",
+    value: function attributeChangedCallback(attrName, _, newVal) {
+      this.componentAttributes[attrName] = newVal;
+      this.innerHTML = this.render();
+    }
+  }], [{
+    key: "observedAttributes",
+    get: function get() {
+      return this.attr;
+    }
+  }]);
+  return GameComponent;
+}( /*#__PURE__*/(0, _wrapNativeSuper2.default)(HTMLElement));
+
+exports.GameComponent = GameComponent;
+GameComponent.attr = [];
+},{"@babel/runtime/helpers/classCallCheck":"ZBnv","@babel/runtime/helpers/createClass":"NoOd","@babel/runtime/helpers/inherits":"qngw","@babel/runtime/helpers/possibleConstructorReturn":"GFCP","@babel/runtime/helpers/getPrototypeOf":"WQgz","@babel/runtime/helpers/wrapNativeSuper":"C2vW"}],"IOdn":[function(require,module,exports) {
+"use strict";
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CardVisualization = void 0;
+
+var GameComponent_1 = require("./GameComponent");
+
+var CardVisualization = /*#__PURE__*/function (_GameComponent_1$Game) {
+  (0, _inherits2.default)(CardVisualization, _GameComponent_1$Game);
+
+  var _super = _createSuper(CardVisualization);
+
+  function CardVisualization() {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, CardVisualization);
+    _this = _super.apply(this, arguments);
+    _this.componentAttributes = {};
+
+    _this.render = function () {
+      return "\n    <div>\n        <div class=\"card\">\n            <div class=\"inner-card\">\n                <div class=\"card-headline\">\n                    <div>".concat(_this.componentAttributes.name, "</div>\n                    <div>").concat(_this.componentAttributes.cost, "</div>\n                </div>\n                <div class=\"border\" style=\"padding: 0.5em; flex: 0 0 40%;\">\n                    card image\n                </div>\n                <div style=\"padding-left: 0.5em; padding-bottom: 2px; flex: 0 0;\">\n                    ").concat(_this.componentAttributes.type, "\n                </div>\n                <div class=\"border\" style=\"padding: 0.5em; flex: 0 0 35%; overflow: auto;\">\n                    ").concat(_this.componentAttributes.text, "\n                </div>\n            </div>\n            <div class=\"card-arrow\"></div>\n        </div>\n    </div>\n    ");
+    };
+
+    return _this;
+  }
+
+  return CardVisualization;
+}(GameComponent_1.GameComponent);
+
+exports.CardVisualization = CardVisualization;
+CardVisualization.attr = ["name", "cost", "type", "text"];
+window.customElements.define("card-visualization", CardVisualization);
+},{"@babel/runtime/helpers/classCallCheck":"ZBnv","@babel/runtime/helpers/inherits":"qngw","@babel/runtime/helpers/possibleConstructorReturn":"GFCP","@babel/runtime/helpers/getPrototypeOf":"WQgz","./GameComponent":"JTdc"}],"WJTB":[function(require,module,exports) {
+"use strict";
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ActionCard = void 0;
+
+var GameComponent_1 = require("./GameComponent");
+
+var ActionCard = /*#__PURE__*/function (_GameComponent_1$Game) {
+  (0, _inherits2.default)(ActionCard, _GameComponent_1$Game);
+
+  var _super = _createSuper(ActionCard);
+
+  function ActionCard() {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, ActionCard);
+    _this = _super.apply(this, arguments);
+    _this.componentAttributes = {};
+
+    _this.render = function () {
+      return "\n    <div id=\"".concat(_this.componentAttributes.name, "\" style=\"display: flex; position: relative;\">\n        <button value=\"").concat(_this.componentAttributes.name, "    [").concat(_this.componentAttributes.cost, "]\" style=\"flex: 1; padding: 0.7rem; display: flex\">\n            <div style=\"flex: 5\">\n                ").concat(_this.componentAttributes.name, " \n            </div>\n            <div style=\"flex: 2; text-align: right\">\n                [").concat(_this.componentAttributes.cost, "]\n            </div>\n        </button>\n        <card-visualization\n            name=\"").concat(_this.componentAttributes.name, "\" \n            cost=\"").concat(_this.componentAttributes.cost, "\"\n            type=\"").concat(_this.componentAttributes.type, "\"\n            text=\"").concat(_this.componentAttributes.text, "\">\n        </card-visualization>\n    </div>\n    ");
+    };
+
+    return _this;
+  }
+
+  return ActionCard;
+}(GameComponent_1.GameComponent);
+
+exports.ActionCard = ActionCard;
+ActionCard.attr = ["name", "cost", "type", "text"];
+window.customElements.define("action-card", ActionCard);
+},{"@babel/runtime/helpers/classCallCheck":"ZBnv","@babel/runtime/helpers/inherits":"qngw","@babel/runtime/helpers/possibleConstructorReturn":"GFCP","@babel/runtime/helpers/getPrototypeOf":"WQgz","./GameComponent":"JTdc"}],"iIt7":[function(require,module,exports) {
+"use strict";
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.TestObject = void 0;
+
+var TestObject = function TestObject() {
+  (0, _classCallCheck2.default)(this, TestObject);
+  this.id = "TestObject";
+
+  this.draw = function (origin) {
+    var size = 32;
+    return "\n            <svg x=".concat(origin.x - size / 2, " y=").concat(origin.y - size / 2, " width=\"").concat(size, "\" height=\"").concat(size, "\" viewbox=\"0 0 ").concat(size, " ").concat(size, "\">\n                <path d=\"M28.623,25c-0.722-1.938-2.388-3.365-4.005-4.751c-1.1-0.942-2.138-1.833-2.786-2.804\n                c-0.704-1.056-1.236-2.747-1.549-4.915c2.061-1.593,3.097-4.201,2.589-6.883c-0.53-2.797-2.804-5.042-5.607-5.536\n                C12.85-0.666,9,2.726,9,7c0,2.185,1.005,4.208,2.717,5.531c-0.313,2.167-0.845,3.859-1.549,4.915\n                c-0.647,0.971-1.686,1.861-2.786,2.804C5.765,21.635,4.099,23.062,3.377,25H2c-0.552,0-1,0.448-1,1v5c0,0.552,0.448,1,1,1h28\n                c0.552,0,1-0.448,1-1v-5c0-0.552-0.448-1-1-1H28.623z M11,7c0-1.331,0.491-2.632,1.305-3.626c1.017-1.01,2.351-1.686,3.695-1.686\n                c0.986,0,1.944,0.331,2.771,0.877C20.113,3.58,21,5.267,21,7c0,2.757-2.243,5-5,5S11,9.757,11,7z M8.684,21.768\n                c1.154-0.989,2.348-2.012,3.148-3.213c0.909-1.364,1.545-3.387,1.897-6.003C14.43,12.839,15.196,13,16,13s1.57-0.161,2.271-0.448\n                c0.353,2.616,0.988,4.639,1.897,6.003c0.8,1.201,1.994,2.224,3.148,3.213c1.58,1.354,3.063,2.639,3.518,4.232H5.165\n                C5.62,24.406,7.104,23.121,8.684,21.768z M29,30H3v-3h26V30z\"/>\n            </svg>\n        ");
+  };
+};
+
+exports.TestObject = TestObject;
+},{"@babel/runtime/helpers/classCallCheck":"ZBnv"}],"BsCT":[function(require,module,exports) {
 "use strict";
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
@@ -1173,25 +1418,7 @@ exports.CONFIG = {
   X_VERSOR: new point_1.Point(SIZE * Math.sqrt(3), 0),
   Y_VERSOR: new point_1.Point(SIZE * Math.sqrt(3) / 2, SIZE * 3 / 2)
 };
-},{"./point":"BsCT"}],"NoOd":[function(require,module,exports) {
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
-
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
-
-module.exports = _createClass;
-},{}],"UQJg":[function(require,module,exports) {
+},{"./point":"BsCT"}],"UQJg":[function(require,module,exports) {
 "use strict";
 
 var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
@@ -1205,11 +1432,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Hex = void 0;
+exports.Hex = exports.HEX_CONTROL_SIGNALS = void 0;
 
 var config_1 = require("./config");
 
 var point_1 = require("./point");
+
+exports.HEX_CONTROL_SIGNALS = ["available", "selected"];
 
 var Hex = /*#__PURE__*/function () {
   function Hex(x, y, z) {
@@ -1217,6 +1446,18 @@ var Hex = /*#__PURE__*/function () {
 
     var gameObjects = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
     (0, _classCallCheck2.default)(this, Hex);
+
+    this.set = function (attr) {
+      var _this$g;
+
+      (_this$g = _this.g) === null || _this$g === void 0 ? void 0 : _this$g.setAttribute(attr, "true");
+    };
+
+    this.unset = function (attr) {
+      var _this$g2;
+
+      (_this$g2 = _this.g) === null || _this$g2 === void 0 ? void 0 : _this$g2.removeAttribute(attr);
+    };
 
     this.draw = function () {
       var center = config_1.CONFIG.ORIGIN_POINT.translate(config_1.CONFIG.X_VERSOR.multiply(_this.position.x)).translate(config_1.CONFIG.Y_VERSOR.multiply(_this.position.y));
@@ -1261,16 +1502,24 @@ var Hex = /*#__PURE__*/function () {
         var button = e.buttons;
 
         if (button === 1) {
-          var _this2$onSelected;
+          var _this2$selectResolve;
 
-          (_this2$onSelected = _this2.onSelected) === null || _this2$onSelected === void 0 ? void 0 : _this2$onSelected.call(_this2, _this2);
+          (_this2$selectResolve = _this2.selectResolve) === null || _this2$selectResolve === void 0 ? void 0 : _this2$selectResolve.call(_this2, _this2);
         }
+      });
+    }
+  }, {
+    key: "id",
+    get: function get() {
+      return this.position.valueOf();
+    }
+  }, {
+    key: "whenSelected",
+    get: function get() {
+      var _this3 = this;
 
-        if (button === 2) {
-          var _this2$onDeselected;
-
-          (_this2$onDeselected = _this2.onDeselected) === null || _this2$onDeselected === void 0 ? void 0 : _this2$onDeselected.call(_this2, _this2);
-        }
+      return new Promise(function (resolve) {
+        return _this3.selectResolve = resolve;
       });
     }
   }]);
@@ -1526,21 +1775,21 @@ function loadIntoMap(view) {
 
 exports.loadIntoMap = loadIntoMap;
 
-function reloadHex(view, hex) {
+function reloadHex(hex) {
   var rendered = hex.draw();
-  view.querySelector("#" + CSS.escape(hex.position.valueOf())).replaceWith(rendered);
+  document.querySelector("#" + CSS.escape(hex.position.valueOf())).replaceWith(rendered);
   return rendered;
 }
 
 exports.reloadHex = reloadHex;
 
-function reloadHexes(view) {
-  for (var _len = arguments.length, hexes = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    hexes[_key - 1] = arguments[_key];
+function reloadHexes() {
+  for (var _len = arguments.length, hexes = new Array(_len), _key = 0; _key < _len; _key++) {
+    hexes[_key] = arguments[_key];
   }
 
   hexes.forEach(function (hex) {
-    return reloadHex(view, hex);
+    return reloadHex(hex);
   });
 }
 
@@ -1569,7 +1818,62 @@ function pointFromChunkId(chunkId) {
     return parseInt(i);
   })));
 }
-},{"@babel/runtime/helpers/construct":"XsAw","@babel/runtime/regenerator":"m4eR","@babel/runtime/helpers/toConsumableArray":"YtCi","@babel/runtime/helpers/asyncToGenerator":"fwsn","./config":"OIFl","./mapProvider":"GLYb","./point":"BsCT","./utils":"BTgH"}],"yevO":[function(require,module,exports) {
+},{"@babel/runtime/helpers/construct":"XsAw","@babel/runtime/regenerator":"m4eR","@babel/runtime/helpers/toConsumableArray":"YtCi","@babel/runtime/helpers/asyncToGenerator":"fwsn","./config":"OIFl","./mapProvider":"GLYb","./point":"BsCT","./utils":"BTgH"}],"e7Sb":[function(require,module,exports) {
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+module.exports = _arrayWithHoles;
+},{}],"nyVk":[function(require,module,exports) {
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+module.exports = _iterableToArrayLimit;
+},{}],"yJnk":[function(require,module,exports) {
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+module.exports = _nonIterableRest;
+},{}],"xw6J":[function(require,module,exports) {
+var arrayWithHoles = require("./arrayWithHoles");
+
+var iterableToArrayLimit = require("./iterableToArrayLimit");
+
+var unsupportedIterableToArray = require("./unsupportedIterableToArray");
+
+var nonIterableRest = require("./nonIterableRest");
+
+function _slicedToArray(arr, i) {
+  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || unsupportedIterableToArray(arr, i) || nonIterableRest();
+}
+
+module.exports = _slicedToArray;
+},{"./arrayWithHoles":"e7Sb","./iterableToArrayLimit":"nyVk","./unsupportedIterableToArray":"IOZJ","./nonIterableRest":"yJnk"}],"yevO":[function(require,module,exports) {
 "use strict";
 
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
@@ -1733,10 +2037,248 @@ function setRotate(transform, deg) {
   var rotate = "rotate(".concat(deg, ")");
   transform.value = transform.value.replace(ROTATE_REGEXP, rotate);
 }
-},{"@babel/runtime/helpers/slicedToArray":"xw6J","./config":"OIFl","./point":"BsCT"}],"KmWJ":[function(require,module,exports) {
+},{"@babel/runtime/helpers/slicedToArray":"xw6J","./config":"OIFl","./point":"BsCT"}],"Z8t9":[function(require,module,exports) {
+"use strict";
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.moveGameObjects = exports.clearBoard = exports.selectFrom = void 0;
+
+var mapLoader_1 = require("../world/mapLoader");
+
+function selectFrom(_x) {
+  return _selectFrom.apply(this, arguments);
+}
+
+function _selectFrom() {
+  _selectFrom = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(board) {
+    var selectedHex;
+    return _regenerator.default.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return Promise.race(board.map(function (hex) {
+              hex.set("available");
+              return hex.whenSelected;
+            }));
+
+          case 2:
+            selectedHex = _context.sent;
+            clearBoard(board, "available");
+            selectedHex.set("selected");
+            return _context.abrupt("return", selectedHex);
+
+          case 6:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _selectFrom.apply(this, arguments);
+}
+
+exports.selectFrom = selectFrom;
+
+function clearBoard(board) {
+  for (var _len = arguments.length, signals = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    signals[_key - 1] = arguments[_key];
+  }
+
+  board.forEach(function (hex) {
+    hex.selectResolve = undefined;
+    signals.forEach(function (s) {
+      return hex.unset(s);
+    });
+  });
+}
+
+exports.clearBoard = clearBoard;
+
+function moveGameObjects(from, to) {
+  var _to$gameObjects;
+
+  (_to$gameObjects = to.gameObjects).push.apply(_to$gameObjects, (0, _toConsumableArray2.default)(from.gameObjects));
+
+  from.gameObjects = [];
+  mapLoader_1.reloadHexes(to, from);
+}
+
+exports.moveGameObjects = moveGameObjects;
+},{"@babel/runtime/regenerator":"m4eR","@babel/runtime/helpers/toConsumableArray":"YtCi","@babel/runtime/helpers/asyncToGenerator":"fwsn","../world/mapLoader":"N3AR"}],"GkrJ":[function(require,module,exports) {
 "use strict";
 
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.cardCollection = exports.discardCard = exports.drawCard = void 0;
+
+var BoardUtils_1 = require("./BoardUtils");
+
+function drawCard(_x) {
+  return _drawCard.apply(this, arguments);
+}
+
+function _drawCard() {
+  _drawCard = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee3(card) {
+    var hand, cardElement, timeout;
+    return _regenerator.default.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            hand = document.querySelector("#hand");
+            cardElement = document.createElement("action-card");
+            Object.entries(card.info).forEach(function (_ref) {
+              var _ref2 = (0, _slicedToArray2.default)(_ref, 2),
+                  key = _ref2[0],
+                  value = _ref2[1];
+
+              cardElement.setAttribute(key, value);
+            });
+            cardElement.onclick = /*#__PURE__*/(0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+              var allCards;
+              return _regenerator.default.wrap(function _callee2$(_context2) {
+                while (1) {
+                  switch (_context2.prev = _context2.next) {
+                    case 0:
+                      console.log("card activated: ", card.info.name);
+                      allCards = hand.querySelectorAll("action-card");
+                      allCards.forEach(function (c) {
+                        return c.setAttribute("class", "card-inactive");
+                      });
+                      cardElement.setAttribute("class", "card-active");
+                      _context2.next = 6;
+                      return card.activate();
+
+                    case 6:
+                      allCards.forEach(function (c) {
+                        return c.removeAttribute("class");
+                      });
+                      discardCard(card);
+
+                    case 8:
+                    case "end":
+                      return _context2.stop();
+                  }
+                }
+              }, _callee2);
+            }));
+            hand.appendChild(cardElement);
+            timeout = Number.parseFloat(getComputedStyle(cardElement).animationDuration.split("s", 1)[0]) * 1000;
+            return _context3.abrupt("return", new Promise(function (resolve) {
+              return setTimeout(resolve, timeout);
+            }));
+
+          case 7:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
+  }));
+  return _drawCard.apply(this, arguments);
+}
+
+exports.drawCard = drawCard;
+
+function discardCard(card) {
+  var hand = document.querySelector("#hand");
+  var cardElement = hand.querySelector("#" + CSS.escape(card.info.name)).parentElement;
+  cardElement.setAttribute("class", "action-card-discard");
+  var timeout = Number.parseFloat(getComputedStyle(cardElement).animationDuration.split("s", 1)[0]) * 1000;
+  setTimeout(function () {
+    return hand.removeChild(cardElement);
+  }, timeout);
+}
+
+exports.discardCard = discardCard;
+exports.cardCollection = {
+  lighting_bolt: function lighting_bolt(board) {
+    return {
+      info: {
+        name: "Lighting bolt",
+        cost: "R",
+        type: "Instant",
+        text: "Deal 3 damage to any target"
+      },
+      activate: function activate() {}
+    };
+  },
+  move_pionek: function move_pionek(board) {
+    return {
+      info: {
+        name: "Move pionek",
+        cost: "R",
+        type: "Instant",
+        text: "Move da pionek"
+      },
+      activate: function () {
+        var _activate = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+          var selectedHex, selectedTargetHex;
+          return _regenerator.default.wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  _context.next = 2;
+                  return BoardUtils_1.selectFrom(board.filter(function (hex) {
+                    return hex.gameObjects.map(function (o) {
+                      return o.id;
+                    }).includes("TestObject");
+                  }));
+
+                case 2:
+                  selectedHex = _context.sent;
+                  _context.next = 5;
+                  return BoardUtils_1.selectFrom(board.filter(function (hex) {
+                    var distance = hex.distance(selectedHex);
+                    return distance > 0 && distance <= 2 && hex.gameObjects.length === 0;
+                  }));
+
+                case 5:
+                  selectedTargetHex = _context.sent;
+                  BoardUtils_1.moveGameObjects(selectedHex, selectedTargetHex);
+
+                case 7:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, _callee);
+        }));
+
+        function activate() {
+          return _activate.apply(this, arguments);
+        }
+
+        return activate;
+      }()
+    };
+  }
+};
+},{"@babel/runtime/helpers/slicedToArray":"xw6J","@babel/runtime/regenerator":"m4eR","@babel/runtime/helpers/asyncToGenerator":"fwsn","./BoardUtils":"Z8t9"}],"KmWJ":[function(require,module,exports) {
+"use strict";
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
 var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
 
@@ -1746,101 +2288,74 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+require("./game/CardVisualization");
+
+require("./game/ActionCard");
+
 var TestObject_1 = require("./game/TestObject");
 
 var mapLoader_1 = require("./world/mapLoader");
 
 var viewCapabilities_1 = require("./world/viewCapabilities");
 
-var map = new Map();
-var view = document.querySelector('#view');
+var CardCollection_1 = require("./game/CardCollection");
+
+var BoardUtils_1 = require("./game/BoardUtils");
+
+var board = [];
+var view = document.querySelector("#view");
 viewCapabilities_1.preventContextMenuCapability(view);
 viewCapabilities_1.applyPanCapability(view);
 viewCapabilities_1.applyZoomCapability(view, 0.3, 2.0, 0.1);
 viewCapabilities_1.applyRotateCapability(view, 30);
-mapLoader_1.loadIntoMap(view.firstElementChild).then(function (hexes) {
-  return hexes.forEach(function (h) {
-    map.set(h.position.valueOf(), h);
-    h.onSelected = handleHexSelection;
-    h.onDeselected = handleHexDeselection;
-  });
-}).then(function () {
-  (0, _toConsumableArray2.default)(map).filter(function (_ref) {
-    var _ref2 = (0, _slicedToArray2.default)(_ref, 2),
-        hexId = _ref2[0],
-        _ = _ref2[1];
-
-    return ["3, 0, 0", "0, 3, 0", "-3, 0, 0", "0, -3, 0", "3, -3, 0", "-3, 3, 0"].includes(hexId);
-  }).forEach(function (_ref3) {
-    var _ref4 = (0, _slicedToArray2.default)(_ref3, 2),
-        _ = _ref4[0],
-        hex = _ref4[1];
-
-    hex.gameObjects.push(new TestObject_1.TestObject());
-    mapLoader_1.reloadHex(view, hex);
-  });
-});
-
-function handleHexSelection(hex) {
-  console.log("LMB " + hex.position.valueOf());
-  var activeHex = Array.from(map.values()).find(function (hex) {
-    return hex.g.hasAttribute("selected");
-  });
-
-  if (activeHex) {
-    if (activeHex === hex) {
-      handleHexDeselection(hex);
-    } else if (hex.g.hasAttribute("available")) {
-      moveGameObjects(activeHex, hex);
-    } else {
-      activeHex.g.removeAttribute("selected");
-      clearAttribute("available");
-      activateHex(hex);
-    }
-  } else {
-    activateHex(hex);
-  }
-}
-
-function handleHexDeselection(hex) {
-  var _document$querySelect;
-
-  console.log("RMB " + hex.position.valueOf());
-  (_document$querySelect = document.querySelector('[selected]')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.removeAttribute('selected');
-  Array.from(map.values()).forEach(function (hex) {
-    return hex.g.removeAttribute("available");
-  });
-}
-
-function moveGameObjects(from, to) {
-  var _to$gameObjects;
-
-  (_to$gameObjects = to.gameObjects).push.apply(_to$gameObjects, (0, _toConsumableArray2.default)(from.gameObjects));
-
-  from.gameObjects = [];
-  mapLoader_1.reloadHexes(view, to, from);
-  clearAttribute("available");
-}
-
-function clearAttribute(attr) {
-  Array.from(map.values()).forEach(function (hex) {
-    return hex.g.removeAttribute(attr);
-  });
-}
-
-function activateHex(hex) {
-  var _hex$g;
-
-  (_hex$g = hex.g) === null || _hex$g === void 0 ? void 0 : _hex$g.setAttribute("selected", "true");
-
-  if (hex.gameObjects.length !== 0) {
-    Array.from(map.values()).filter(function (h) {
-      var distance = h.distance(hex);
-      return distance > 0 && distance <= 2 && h.gameObjects.length === 0;
-    }).forEach(function (h) {
-      return h.g.setAttribute("available", "true");
+view.addEventListener("mousedown", function (e) {
+  if (e.buttons === 2) {
+    var cards = document.querySelectorAll("action-card");
+    cards.forEach(function (c) {
+      return c.removeAttribute("class");
     });
+    BoardUtils_1.clearBoard(board, "available", "selected");
   }
-}
-},{"@babel/runtime/helpers/slicedToArray":"xw6J","@babel/runtime/helpers/toConsumableArray":"YtCi","./game/TestObject":"iIt7","./world/mapLoader":"N3AR","./world/viewCapabilities":"yevO"}]},{},["KmWJ"], null)
-//# sourceMappingURL=/main.c391e1cf.js.map
+});
+mapLoader_1.loadIntoMap(view.firstElementChild).then(function (hexes) {
+  return board.push.apply(board, (0, _toConsumableArray2.default)(hexes));
+}).then(function () {
+  board.filter(function (hex) {
+    return ["3, 0, 0", "0, 3, 0", "-3, 0, 0", "0, -3, 0", "3, -3, 0", "-3, 3, 0"].includes(hex.id);
+  }).forEach(function (hex) {
+    hex.gameObjects.push(new TestObject_1.TestObject());
+    mapLoader_1.reloadHex(hex);
+  });
+}).then( /*#__PURE__*/(0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+  return _regenerator.default.wrap(function _callee$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          _context.next = 2;
+          return CardCollection_1.drawCard(CardCollection_1.cardCollection.move_pionek(board));
+
+        case 2:
+          _context.next = 4;
+          return CardCollection_1.drawCard(CardCollection_1.cardCollection.move_pionek(board));
+
+        case 4:
+          _context.next = 6;
+          return CardCollection_1.drawCard(CardCollection_1.cardCollection.move_pionek(board));
+
+        case 6:
+          _context.next = 8;
+          return CardCollection_1.drawCard(CardCollection_1.cardCollection.move_pionek(board));
+
+        case 8:
+          _context.next = 10;
+          return CardCollection_1.drawCard(CardCollection_1.cardCollection.move_pionek(board));
+
+        case 10:
+        case "end":
+          return _context.stop();
+      }
+    }
+  }, _callee);
+}))); // discardCard(cardCollection.lighting_bolt)
+},{"@babel/runtime/regenerator":"m4eR","@babel/runtime/helpers/asyncToGenerator":"fwsn","@babel/runtime/helpers/toConsumableArray":"YtCi","./game/CardVisualization":"IOdn","./game/ActionCard":"WJTB","./game/TestObject":"iIt7","./world/mapLoader":"N3AR","./world/viewCapabilities":"yevO","./game/CardCollection":"GkrJ","./game/BoardUtils":"Z8t9"}]},{},["KmWJ"], null)
+//# sourceMappingURL=/main.da8d25c0.js.map
