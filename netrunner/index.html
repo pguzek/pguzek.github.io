@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Netrunner</title>
+</head>
+
+<body>
+    <div>
+        <div class="card" style="left: 0px; top: 0px;">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEArMDpLqCtEe0kLcWh5dJj0s-dAnCShz_cQ&s">
+        </div>
+    </div>
+    <script>
+        let card = document.querySelector(".card")
+
+        let grab = e => {
+            e.preventDefault()
+
+            card.addEventListener("mousemove", pan)
+            card.addEventListener("mouseup", ungrab)
+        }
+
+        let pan = e => {
+            e.preventDefault()
+
+            let targetCard = e.target.parentElement
+
+            targetCard.style.left = e.x - targetCard.clientWidth / 2 + "px"
+            targetCard.style.top = e.y - targetCard.clientHeight / 2 + "px"
+        }
+
+        let ungrab = e => {
+            e.preventDefault()
+
+            card.removeEventListener("mousemove", pan)
+        }
+
+        card.addEventListener("mousedown", grab)
+        console.log(card)
+    </script>
+    <style>
+        .card {
+            position: absolute;
+        }
+    </style>
+</body>
+
+</html>
