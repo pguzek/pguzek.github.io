@@ -3,48 +3,262 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Netrunner</title>
 </head>
 
 <body>
     <div>
-        <div class="card" style="left: 0px; top: 0px;">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEArMDpLqCtEe0kLcWh5dJj0s-dAnCShz_cQ&s">
+        <div class="flex-container">
+            <div class="element fixed-height"><h1 class="text-secondary">Runner</h1></div>
+            <div class="element flexible"></div>
+            <div class="element fixed-height"><h1 class="text-secondary">Corporation</h1></div>
         </div>
     </div>
     <script>
-        let card = document.querySelector(".card")
+        let deckList = `3x Offworld Office
+        3x Orbital Superiority
+        3x Send a Message
+        1x Superconducting Hub
+        3x Nico Campaign
+        3x Regolith Mining License
+        3x Spin Doctor
+        3x Urtica Cipher
+        3x Government Subsidy
+        3x Hedge Fund
+        2x Public Trail
+        3x Retribution
+        2x Manegarm Skunkworks
+        3x Brân 1.0
+        3x Palisade
+        1x Ping
+        3x Funhouse
+        3x Whitespace
+        3x Ansel 1.0
+        3x Karunā`
 
-        let grab = e => {
-            e.preventDefault()
+        deckList = deckList.split("\n").flatMap(entry => {
+            [number, name] = entry.trim().split("x ", 2)
+            return [...new Array(parseInt(number))].map(() => name)
+        })
 
-            card.addEventListener("mousemove", pan)
-            card.addEventListener("mouseup", ungrab)
+        async function fetchAllCards() {
+            try {
+                const response = await fetch("https://netrunnerdb.com/api/2.0/public/cards");
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch: ${response.statusText}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching:', error);
+            }
         }
 
-        let pan = e => {
-            e.preventDefault()
-
-            let targetCard = e.target.parentElement
-
-            targetCard.style.left = e.x - targetCard.clientWidth / 2 + "px"
-            targetCard.style.top = e.y - targetCard.clientHeight / 2 + "px"
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
         }
 
-        let ungrab = e => {
-            e.preventDefault()
+        const createDeck = async (deckList) => {
+            allCards = await fetchAllCards()
+            deck = deckList.map(cardName => allCards.data.find(c => c.title === cardName)).map(cardIfo => {
+                cardIfo.image = `https://card-images.netrunnerdb.com/v2/large/${cardIfo.code}.jpg`
+                return cardIfo
+            })
+            shuffle(deck)
+            deck.forEach(cardInfo => createCard(cardInfo, "85vw", "75vh"))
 
-            card.removeEventListener("mousemove", pan)
+            deckElement = document.createElement("div")
+            deckElement.innerHTML = `
+                <div id="corporation-deck" class="deck" title="draw a card" style="left: 85vw; top: 75vh;">
+                    <img width="190" height="265" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEArMDpLqCtEe0kLcWh5dJj0s-dAnCShz_cQ&s">
+                </div>
+            `
+            document.querySelector("body").appendChild(deckElement)
         }
 
-        card.addEventListener("mousedown", grab)
-        console.log(card)
+        createDeck(deckList)
+
+        const createCard = (cardInfo, x, y) => {
+            uuid = crypto.randomUUID()
+
+            const element = document.createElement("div")
+            element.title = cardInfo.title
+            element.setAttribute("data-side", cardInfo.side_code)
+            element.setAttribute("data-faction", cardInfo.faction_code)
+            element.setAttribute("data-type", cardInfo.type_code)
+            element.style = `left: ${x}; top: ${y};`
+            element.classList.add("game-card")
+            element.classList.add("flipped")
+            element.setAttribute("id", uuid)
+            element.innerHTML = `
+            <div class="card-front">
+                <img width="190" height="265" src="${cardInfo.image}">
+                <div class="game-card-tooltip"><img width="190" height="265" src="${cardInfo.image}"></div>
+            </div>
+            <div class="card-back">
+                <img width="190" height="265" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEArMDpLqCtEe0kLcWh5dJj0s-dAnCShz_cQ&s">
+                <div class="game-card-tooltip"><img width="190" height="265" src="${cardInfo.image}"></div>
+            </div>
+            `
+            document.querySelector("body").appendChild(element)
+            element.addEventListener("mousedown", addGrabCapability(element))
+            element.addEventListener("dblclick", () => {
+                console.log("flip")
+                element.classList.toggle("flipped")
+            })
+        }
+
+        
+        function isOverlapping(el1, el2) {
+            const rect1 = el1.getBoundingClientRect();
+            const rect2 = el2.getBoundingClientRect();
+
+            return !(rect1.right < rect2.left || 
+                    rect1.left > rect2.right || 
+                    rect1.bottom < rect2.top || 
+                    rect1.top > rect2.bottom);
+        }
+
+        const addGrabCapability = (element) => {
+            let grab = e => {
+                e.preventDefault()
+
+                document.querySelector("body").addEventListener("mousemove", move)
+                document.querySelector("body").addEventListener("mouseup", ungrab)
+            }
+
+            let move = e => {
+                e.preventDefault()
+
+                const x = element.getBoundingClientRect().x
+                const y = element.getBoundingClientRect().y
+
+                element.style.left = x + e.movementX + "px"
+                element.style.top = y + e.movementY + "px"
+            }
+
+            let ungrab = e => {
+                e.preventDefault()
+                document.querySelector("body").removeEventListener("mousemove", move)
+                document.querySelector("body").removeEventListener("mouseup", ungrab)
+
+                const grid = 25
+                const left = Math.round(element.getBoundingClientRect().x / grid) * grid
+                const top = Math.round(element.getBoundingClientRect().y / grid) * grid
+                element.style.left = `${left}px`;
+                element.style.top = `${top}px`;
+                
+                console.log(element.getBoundingClientRect().y, document.documentElement.clientHeight)
+                if (element.getBoundingClientRect().y > (document.documentElement.clientHeight - 150)) {
+                    element.classList.remove("flipped")
+                    if (element.getAttribute("data-type") === "ice") {
+                        element.classList.remove("rotated")
+                    }
+                } else {
+                    element.classList.add("flipped")
+                    if (element.getAttribute("data-type") === "ice") {
+                        element.classList.add("rotated")
+                    }
+                }
+            }
+
+            return grab
+        }
     </script>
     <style>
-        .card {
+        html, body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+        .flex-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+        }
+        .element {
+            width: 100%;
+        }
+        .fixed-height {
+            height: 150px;
+            background-color: lightskyblue;
+        }
+        .flexible {
+            flex-grow: 1;
+            background-color: lightblue;
+        }
+
+        
+
+        .deck {
             position: absolute;
+            transform: translate(-50%, -50%) scale(.5) translate(-5px, 5px);
+            padding-left: 10px;
+            padding-bottom: 10px;
+            border: 5px solid black;
+            border-top-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            background-color: black;
+        }
+        .game-card {
+            position: absolute;
+            transform: translate(-50%, -50%) scale(.5);
+            z-index: 1;
+            /* transition: transform 0.3s ease; */
+        }
+        .game-card.rotated {
+            transform: translate(-50%, -50%) scale(.5) rotate(90deg);
+        }
+        .game-card:hover {
+            z-index: 10;
+        }
+        .game-card-tooltip {
+            border: 2px solid black;
+            position: absolute;
+            visibility: hidden;
+            transform: scale(3) translateY(-280px);
+        }
+        .rotated .game-card-tooltip {
+            transform:  rotate(-90deg) scale(3) translateY(-180px) translateX(90px);
+        }
+
+        .card-front {
+            transform: translate(-50%, -50%);
+            border: 2px solid black;
+            position: absolute;
+            visibility: visible;
+        }
+        .card-back {
+            transform: translate(-50%, -50%);
+            border: 2px solid black;
+            position: absolute;
+            visibility: hidden;
+        }
+        .game-card:hover .card-front .game-card-tooltip {
+            visibility: visible;
+        }
+        .game-card:hover .card-back .game-card-tooltip {
+            visibility: hidden;
+        }
+
+        .flipped .card-front {
+            visibility: hidden;
+        }
+        .flipped .card-back {
+            visibility: visible;
+        }
+        .game-card.flipped:hover .card-front .game-card-tooltip {
+            visibility: hidden;
+        }
+        .game-card.flipped:hover .card-back .game-card-tooltip {
+            visibility: visible;
         }
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </body>
 
 </html>
