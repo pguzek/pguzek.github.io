@@ -158,7 +158,9 @@
                         element.classList.remove("rotated")
                     }
                 } else {
-                    element.classList.add("flipped")
+                    if (element.getAttribute("data-type") !== "operation") {
+                        element.classList.add("flipped")
+                    }
                     if (element.getAttribute("data-type") === "ice") {
                         element.classList.add("rotated")
                     }
