@@ -57,9 +57,9 @@
         <div id="open-resource-panel" class="btn btn-primary rounded-end fw-bold px-1"  style="position: fixed; top: 45vh; border-radius: 0; writing-mode: vertical-lr;">Resource panel</div>
         
         <div class="flex-container">
-            <div class="player-hand"><h1 id="opponent-title" class="text-secondary p-3">Runner</h1></div>
+            <div id="opponent-hand" class="player-hand"><h1 id="opponent-title" class="text-secondary p-3">Runner</h1></div>
             <div class="board"></div>
-            <div class="player-hand"><h1 id="your-title" class="text-secondary p-3">Corporation</h1></div>
+            <div id="your-hand" class="player-hand"><h1 id="your-title" class="text-secondary p-3">Corporation</h1></div>
         </div>
 
         <div id="open-player-panel" class="btn btn-primary rounded-start fw-bold px-1" style="position: fixed; top: 45vh; left: 100vw; border-radius: 0; writing-mode: sideways-lr; transform: translateX(-100%);">Player panel</div>
@@ -373,6 +373,7 @@
                 element.style.top = y + e.movementY + "px"
 
                 updateCardTooltipPosition(element)
+                updateCardHoverArea(element)
             }
 
             const ungrab = e => {
@@ -381,6 +382,7 @@
                 document.querySelector("body").removeEventListener("mouseup", ungrab)
 
                 snapToGrid(element)
+                updateCardOrder(element)
                 updateCardTooltipPosition(element)
                 updateCardArea(element)
                 handleCardBehavior(element)
@@ -389,24 +391,48 @@
             return grab
         }
 
+        const updateCardOrder = (cardElement) => {
+            const cardLayer = document.querySelector("#card-layer")
+            cardLayer.append(cardElement)
+        }
+
         const updateCardTooltipPosition = (cardElement) => {
-            if (cardElement.getBoundingClientRect().y < 500) {
+            const y = cardElement.getBoundingClientRect().y
+            if (y < 500) {
                 cardElement.querySelector(".game-card-tooltip").classList.add("force-in-view")
             } else {
                 cardElement.querySelector(".game-card-tooltip").classList.remove("force-in-view")
             }
         }
 
+        const updateCardHoverArea = (cardElement) => {
+            const x = cardElement.getBoundingClientRect().x
+            const y = cardElement.getBoundingClientRect().y
+            const yourHaneHeight = document.querySelector("#your-hand").getBoundingClientRect().height - 10 //protection from play by grid snapping
+            const deckPositions = [...document.querySelectorAll(".deck")].map(d => d.getBoundingClientRect())
+
+            if (deckPositions.some(position => position.x === x && position.y === y)) {
+                cardElement.setAttribute("data-hover-location", "deck")
+            } else if (y > (document.documentElement.clientHeight - yourHaneHeight)) {
+                cardElement.setAttribute("data-hover-location", "hand")
+            } else if (y <  yourHaneHeight) {
+                cardElement.setAttribute("data-hover-location", "opponent-hand")
+            } else {
+                cardElement.setAttribute("data-hover-location", "board")
+            }
+        }
+
         const updateCardArea = (cardElement) => {
             const x = cardElement.getBoundingClientRect().x
             const y = cardElement.getBoundingClientRect().y
+            const yourHaneHeight = document.querySelector("#your-hand").getBoundingClientRect().height - 10 //protection from play by grid snapping
             const deckPositions = [...document.querySelectorAll(".deck")].map(d => d.getBoundingClientRect())
 
             if (deckPositions.some(position => position.x === x && position.y === y)) {
                 cardElement.setAttribute("data-location", "deck")
-            } else if (y > (document.documentElement.clientHeight - 150)) {
+            } else if (y > (document.documentElement.clientHeight - yourHaneHeight)) {
                 cardElement.setAttribute("data-location", "hand")
-            } else if (y <  150) {
+            } else if (y <  yourHaneHeight) {
                 cardElement.setAttribute("data-location", "opponent-hand")
             } else {
                 cardElement.setAttribute("data-location", "board")
@@ -429,6 +455,9 @@
                 case "hand":
                     cardElement.classList.remove("flipped")
                     cardVisibility(cardElement, true, false, true)
+                    const yourHandRect = document.querySelector("#your-hand").getBoundingClientRect()
+                    cardElement.style.top = yourHandRect.y + yourHandRect.height / 2 + "px"
+                    snapToGrid(cardElement)
                     break
 
                 case "opponent-hand":
@@ -449,6 +478,13 @@
                         }
                     } else {
                         cardVisibility(cardElement, true, false, true)
+                    }
+                    const yourHandY = document.querySelector("#your-hand").getBoundingClientRect().y
+                    const cardY = cardElement.getBoundingClientRect().y
+                    console.log((yourHandY - cardY))
+                    if (yourHandY - cardY < 75) {
+                        cardElement.style.top = cardY - (75 - (yourHandY - cardY)) + "px"
+                        snapToGrid(cardElement)
                     }
                     break
 
@@ -588,6 +624,15 @@
         }
         .rotated .game-card-tooltip {
             transform: rotate(-90deg) scale(3.1415) translate(45px, -210px) var(--force-in-view);
+        }
+
+        .game-card[data-location="hand"]:not([data-hover-location="hand"])>* {
+            box-shadow:
+                0 0 5px rgba(173, 255, 47, 0.5),
+                0 0 10px rgba(173, 255, 47, 0.5),
+                0 0 20px rgba(173, 255, 47, 0.5),
+                0 0 30px rgba(173, 255, 47, 0.5),
+                0 0 40px rgba(173, 255, 47, 0.5);
         }
 
         :root {
