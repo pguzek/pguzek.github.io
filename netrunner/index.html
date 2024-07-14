@@ -139,7 +139,7 @@
 1x Self-modifying Code
                         </textarea>
                     </div>
-                    <button class="btn btn-primary mt-2">Reload deck</button>
+                    <button id="reload-deck-button" class="btn btn-primary mt-2">Reload deck</button>
                 </div>
             </div>
         </div>
@@ -172,6 +172,8 @@
 
 
     <script type="module">
+        window.playerSide = "corp"
+
         document.addEventListener("click", e => {
             document.querySelector(".dropdown-menu").style.display = "none"
         })
@@ -218,6 +220,7 @@
                     snapToGrid(card)
                     updateCardTooltipPosition(card)
                     updateCardArea(card)
+                    updateCardHoverArea(card)
                     handleCardBehavior(card)
                 })
             }
@@ -237,6 +240,7 @@
                     snapToGrid(card)
                     updateCardTooltipPosition(card)
                     updateCardArea(card)
+                    updateCardHoverArea(card)
                     handleCardBehavior(card)
                 })
             }
@@ -247,7 +251,9 @@
             document.querySelector("#runner-deck").classList.remove("hidden")
         })
 
-        window.playerSide = "corp"
+        document.querySelector("#reload-deck-button").addEventListener("click", e => {
+            document.querySelector("#card-layer").innerHTML = ""
+        })
 
         async function fetchAllCards() {
             try {
@@ -378,8 +384,9 @@
                 const offsetY = elementRect.y - e.clientY
 
                 const thisMove = move(offsetX, offsetY)
+                const thisUngrab = ungrab(thisMove)
                 document.querySelector("body").addEventListener("mousemove", thisMove)
-                document.querySelector("body").addEventListener("mouseup", ungrab(thisMove))
+                document.querySelector("body").addEventListener("mouseup", thisUngrab)
             }
 
             const move = (offsetX, offsetY) => e => {
@@ -392,16 +399,19 @@
                 updateCardHoverArea(element)
             }
 
-            const ungrab = (move) => e => {
-                e.preventDefault()
-                document.querySelector("body").removeEventListener("mousemove", move)
-                document.querySelector("body").removeEventListener("mouseup", ungrab)
+            const ungrab = (thisMove) => {
+                const thisUngrab = e => {
+                    console.log("ungrab", element.getAttribute("data-title"))
+                    e.preventDefault()
+                    document.querySelector("body").removeEventListener("mousemove", thisMove)
+                    document.querySelector("body").removeEventListener("mouseup", thisUngrab)
 
-                snapToGrid(element)
-                updateCardOrder(element)
-                updateCardTooltipPosition(element)
-                updateCardArea(element)
-                handleCardBehavior(element)
+                    snapToGrid(element)
+                    updateCardOrder(element)
+                    updateCardArea(element)
+                    handleCardBehavior(element)
+                }
+                return thisUngrab
             }
 
             return grab
