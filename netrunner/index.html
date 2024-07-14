@@ -9,7 +9,6 @@
         TODO:
         - deck cotaining cards
         - tokens
-        - prespective flip
         - reload deck
     </div>
 </head>
@@ -58,9 +57,9 @@
         <div id="open-resource-panel" class="btn btn-primary rounded-end fw-bold px-1"  style="position: fixed; top: 45vh; border-radius: 0; writing-mode: vertical-lr;">Resource panel</div>
         
         <div class="flex-container">
-            <div class="player-hand"><h1 id="opponent-title" class="text-secondary">Runner</h1></div>
+            <div class="player-hand"><h1 id="opponent-title" class="text-secondary p-3">Runner</h1></div>
             <div class="board"></div>
-            <div class="player-hand"><h1 id="your-title" class="text-secondary">Corporation</h1></div>
+            <div class="player-hand"><h1 id="your-title" class="text-secondary p-3">Corporation</h1></div>
         </div>
 
         <div id="open-player-panel" class="btn btn-primary rounded-start fw-bold px-1" style="position: fixed; top: 45vh; left: 100vw; border-radius: 0; writing-mode: sideways-lr; transform: translateX(-100%);">Player panel</div>
@@ -153,6 +152,11 @@
     </ul>
     <!-- <div class="grid-container" style="width: 100vw; height: 100vh; position: absolute; left: 0px; top: 0px;"></div> for debugging -->
     <div id="card-layer"></div>
+
+
+
+
+
     <script type="module">
         document.addEventListener("click", e => {
             document.querySelector(".dropdown-menu").style.display = "none"
@@ -191,7 +195,18 @@
 
         document.querySelector("#corp-check").checked = "true"
         document.querySelector("#corp-check").addEventListener("click", e => {
-            window.playerSide = "corp"
+            console.log(window.playerSide)
+            if (window.playerSide !== "corp") {
+                window.playerSide = "corp";
+                [...document.querySelector("#card-layer").children].forEach(card => {
+                    card.style.left = document.querySelector("body").getBoundingClientRect().width - card.getBoundingClientRect().x + "px"
+                    card.style.top = document.querySelector("body").getBoundingClientRect().height - card.getBoundingClientRect().y + "px"
+                    snapToGrid(card)
+                    updateCardTooltipPosition(card)
+                    updateCardArea(card)
+                    handleCardBehavior(card)
+                })
+            }
             document.querySelector("#your-title").innerText = "Corporation"
             document.querySelector("#opponent-title").innerText = "Runner"
 
@@ -199,7 +214,18 @@
             document.querySelector("#runner-deck").classList.add("hidden")
         })
         document.querySelector("#runner-check").addEventListener("click", e => {
-            window.playerSide = "runner"
+            console.log(window.playerSide)
+            if (window.playerSide !== "runner") {
+                window.playerSide = "runner";
+                [...document.querySelector("#card-layer").children].forEach(card => {
+                    card.style.left = document.querySelector("body").getBoundingClientRect().width - card.getBoundingClientRect().x + "px"
+                    card.style.top = document.querySelector("body").getBoundingClientRect().height - card.getBoundingClientRect().y + "px"
+                    snapToGrid(card)
+                    updateCardTooltipPosition(card)
+                    updateCardArea(card)
+                    handleCardBehavior(card)
+                })
+            }
             document.querySelector("#your-title").innerText = "Runner"
             document.querySelector("#opponent-title").innerText = "Corporation"
 
@@ -236,7 +262,7 @@
         function snapToGrid(element, grid = 25) {
             const left = Math.round(element.getBoundingClientRect().x / grid) * grid
             const top = Math.round(element.getBoundingClientRect().y / grid) * grid
-            console.log(element.getBoundingClientRect().x, element.getBoundingClientRect().y, left, top, element)
+            // console.log(element.getBoundingClientRect().x, element.getBoundingClientRect().y, left, top, element)
             element.style.left = `${left}px`;
             element.style.top = `${top}px`;
         }
@@ -292,6 +318,7 @@
             cardElement.addEventListener("auxclick", putCardUnder(cardElement))
             cardElement.addEventListener("contextmenu", cardContextMenu(cardElement))
             snapToGrid(cardElement)
+            updateCardTooltipPosition(cardElement)
             handleCardBehavior(cardElement)
             return cardElement
         }
@@ -344,6 +371,8 @@
 
                 element.style.left = x + e.movementX + "px"
                 element.style.top = y + e.movementY + "px"
+
+                updateCardTooltipPosition(element)
             }
 
             const ungrab = e => {
@@ -352,15 +381,36 @@
                 document.querySelector("body").removeEventListener("mouseup", ungrab)
 
                 snapToGrid(element)
-                if (element.getBoundingClientRect().y > (document.documentElement.clientHeight - 150)) {
-                    element.setAttribute("data-location", "hand")
-                } else {
-                    element.setAttribute("data-location", "board")
-                }
+                updateCardTooltipPosition(element)
+                updateCardArea(element)
                 handleCardBehavior(element)
             }
 
             return grab
+        }
+
+        const updateCardTooltipPosition = (cardElement) => {
+            if (cardElement.getBoundingClientRect().y < 500) {
+                cardElement.querySelector(".game-card-tooltip").classList.add("force-in-view")
+            } else {
+                cardElement.querySelector(".game-card-tooltip").classList.remove("force-in-view")
+            }
+        }
+
+        const updateCardArea = (cardElement) => {
+            const x = cardElement.getBoundingClientRect().x
+            const y = cardElement.getBoundingClientRect().y
+            const deckPositions = [...document.querySelectorAll(".deck")].map(d => d.getBoundingClientRect())
+
+            if (deckPositions.some(position => position.x === x && position.y === y)) {
+                cardElement.setAttribute("data-location", "deck")
+            } else if (y > (document.documentElement.clientHeight - 150)) {
+                cardElement.setAttribute("data-location", "hand")
+            } else if (y <  150) {
+                cardElement.setAttribute("data-location", "opponent-hand")
+            } else {
+                cardElement.setAttribute("data-location", "board")
+            }
         }
 
         const handleCardBehavior = (cardElement) => {
@@ -370,47 +420,65 @@
                 case "deck":
                     if (cardElement.getAttribute("data-type") === "identity") {
                         cardElement.setAttribute("data-location", "board")
-                        cardElement.querySelector(".card-front").classList.remove("hidden")
-                        cardElement.querySelector(".card-back").classList.add("hidden")
-                        cardElement.querySelector(".game-card-tooltip").classList.remove("hidden")
+                        cardVisibility(cardElement, true, false, true)
                     } else {
-                        cardElement.querySelector(".card-front").classList.add("hidden")
-                        cardElement.querySelector(".card-back").classList.remove("hidden")
-                        cardElement.querySelector(".game-card-tooltip").classList.add("hidden")
+                        cardVisibility(cardElement, false, true, false)
                     }
                     break
 
                 case "hand":
                     cardElement.classList.remove("flipped")
-                    cardElement.querySelector(".card-front").classList.remove("hidden")
-                    cardElement.querySelector(".card-back").classList.add("hidden")
-                    cardElement.querySelector(".game-card-tooltip").classList.remove("hidden")
+                    cardVisibility(cardElement, true, false, true)
+                    break
+
+                case "opponent-hand":
+                    cardElement.classList.remove("flipped")
+                    cardVisibility(cardElement, false, true, false)
                     break
 
                 case "board":
                     if (cardElement.getAttribute("data-side") === "corp") {
                         if (cardElement.getAttribute("data-type") === "operation" || cardElement.getAttribute("data-type") === "identity") {
-                            cardElement.querySelector(".card-front").classList.remove("hidden")
-                            cardElement.querySelector(".card-back").classList.add("hidden")
-                            cardElement.querySelector(".game-card-tooltip").classList.remove("hidden")
+                            cardVisibility(cardElement, true, false, true)
                         } else {
-                            cardElement.querySelector(".card-front").classList.add("hidden")
-                            cardElement.querySelector(".card-back").classList.remove("hidden")
-                            cardElement.querySelector(".game-card-tooltip").classList.remove("hidden")
+                            if (cardElement.getAttribute("data-side") === window.playerSide) {
+                                cardVisibility(cardElement, false, true, true)
+                            } else {
+                                cardVisibility(cardElement, false, true, false)
+                            }
                         }
+                    } else {
+                        cardVisibility(cardElement, true, false, true)
                     }
                     break
 
                 case "bin":
-                    cardElement.querySelector(".card-front").classList.remove("hidden")
-                    cardElement.querySelector(".card-back").classList.add("hidden")
-                    cardElement.querySelector(".game-card-tooltip").classList.remove("hidden")
+                    cardVisibility(cardElement, true, false, true)
                     break
             }
+
             if (cardElement.getAttribute("data-type") === "ice" && cardLocation === "board") {
                 cardElement.classList.add("rotated")
             } else {
                 cardElement.classList.remove("rotated")
+            }
+        }
+
+        function cardVisibility(cardElement, frontVisible, backVisible, tooltipVisible) {
+            if (frontVisible) {
+                cardElement.querySelector(".card-front").classList.remove("hidden")
+            } else {
+                cardElement.querySelector(".card-front").classList.add("hidden")
+            }
+            if (backVisible) {
+                cardElement.querySelector(".card-back").classList.remove("hidden")
+            } else {
+                cardElement.querySelector(".card-back").classList.add("hidden")
+            }
+            if (tooltipVisible) {
+                cardElement.querySelector(".game-card-tooltip").classList.remove("hidden")
+            } else {
+                cardElement.querySelector(".game-card-tooltip").classList.add("hidden")
             }
         }
 
@@ -421,8 +489,12 @@
         createDeck(allCards, document.querySelector("#runner-deck-list").value, "15vw", "25vh")
         const runnerIndentity = document.querySelector("#runner-identity").value.trim()
         const runnerIndentityElement = createCard(allCards.find(cardInfo => cardInfo.title.replaceAll(":", "") === runnerIndentity), "25vw", "25vh")
-
     </script>
+
+
+
+
+
     <style>
         html, body {
             height: 100vh;
@@ -491,22 +563,23 @@
             overflow: hidden;
             position: absolute;
             visibility: hidden;
-            transform: scale(3.1415) translate(-30px, -230px);
+            transform: scale(3.1415) translate(-30px, -230px) var(--force-in-view);
         }
 
         .game-card:hover .game-card-tooltip {
             visibility: visible;
         }
+
         .hidden {
             display: none;
         }
-        .flipped * {
+        .flipped>:not(.hidden) {
             display: none;
         }
-        .flipped .hidden {
+        .flipped>.hidden {
             display: block;
         }
-        .flipped .hidden * {
+        .flipped>.card-front.hidden~.game-card-tooltip:not(.hidden) {
             display: block;
         }
 
@@ -514,7 +587,15 @@
             transform: translate(-50%, -50%) scale(.5) rotate(90deg);
         }
         .rotated .game-card-tooltip {
-            transform: rotate(-90deg) scale(3.1415) translate(45px, -210px);
+            transform: rotate(-90deg) scale(3.1415) translate(45px, -210px) var(--force-in-view);
+        }
+
+        :root {
+            --force-in-view: translate(0px, 0px)
+        }
+
+        .force-in-view {
+            --force-in-view: translate(0px, 375px)
         }
 
         .grid-container {
