@@ -5,23 +5,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Netrunner</title>
+    <div style="display: none;">
+        TODO:
+        - deck cotaining cards
+        - tokens
+        - prespective flip
+        - reload deck
+    </div>
 </head>
 
 <body>
     <div>
-        <div id="resource-panel" class="offcanvas offcanvas-start" tabindex="-1">
+        <div id="resource-panel" class="offcanvas offcanvas-start" style="background-color: aliceblue;" tabindex="-1">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title">Resource panel</h5>
             </div>
             <div class="offcanvas-body">
-                <ul class="">
-                    <li class="p-3">Click</li>
-                    <li class="p-3">1 credit</li>
-                    <li class="p-3">5 credits</li>
-                    <li class="p-3">Counter</li>
-                    <li class="p-3">Tag</li>
-                    <li class="p-3">Bad publicity</li>
-                    <li class="p-3">Brain damage</li>
+                <ul>
+                    <li>Virus
+                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Virus">
+                            <img style="transform: translate(-40px, -45px);" src="assets/virus.jpg">
+                        </div>
+                    </li>
+                    <li>Credit
+                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Credit">
+                            <img style="transform: translate(-40px, -45px);" src="assets/credit.jpg">
+                        </div>
+                    </li>
+                    <li>Counter
+                        <div class="rounded-circle" style="overflow: hidden; width: 256px; height: 256px; transform: scale(0.171875); margin: -104px;" title="Counter">
+                            <img style="transform: translate(-0px, -0px);" src="assets/click.jpg">
+                        </div>
+                    </li>
+                    <li>Tag
+                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Tag">
+                            <img style="transform: translate(-40px, -45px);" src="assets/tag.jpg">
+                        </div>
+                    </li>
+                    <li>Bad publicity
+                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Bad publicity">
+                            <img style="transform: translate(-40px, -45px);" src="assets/bad_publicity.jpg">
+                        </div>
+                    </li>
+                    <li>Brain damage
+                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Brain damage">
+                            <img style="transform: translate(-40px, -45px); position: absolute;" src="assets/brain_damage.jpg">
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -34,7 +64,7 @@
         </div>
 
         <div id="open-player-panel" class="btn btn-primary rounded-start fw-bold px-1" style="position: fixed; top: 45vh; left: 100vw; border-radius: 0; writing-mode: sideways-lr; transform: translateX(-100%);">Player panel</div>
-        <div id="player-panel" class="offcanvas offcanvas-end" tabindex="-1">
+        <div id="player-panel" class="offcanvas offcanvas-end" style="background-color: aliceblue;" tabindex="-1">
             <div class="offcanvas-header">
                 <h4 class="offcanvas-title">Player panel</h4>
             </div>
@@ -42,11 +72,11 @@
                 <div>
                     <h5>Play as:</h5>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="corp-check" value="corp" checked>
+                        <input class="form-check-input" type="radio" name="player-choice" id="corp-check" value="corp">
                         <label class="form-check-label" for="corp-check">Corporation</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="runner-check" value="runner">
+                        <input class="form-check-input" type="radio" name="player-choice" id="runner-check" value="runner">
                         <label class="form-check-label" for="runner-check">Runner</label>
                     </div>
                 </div>
@@ -159,6 +189,7 @@
             resourcePanel.classList.add("hiding")
         })
 
+        document.querySelector("#corp-check").checked = "true"
         document.querySelector("#corp-check").addEventListener("click", e => {
             window.playerSide = "corp"
             document.querySelector("#your-title").innerText = "Corporation"
@@ -216,7 +247,10 @@
             deckElement.style.left = x
             deckElement.style.top = y
             deckElement.classList.add("deck")
-            deckElement.innerHTML = `<div class="deck-card-back"><img width="190" height="265" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEArMDpLqCtEe0kLcWh5dJj0s-dAnCShz_cQ&s"></div>`
+            deckElement.innerHTML = `
+            <div class="deck-card-back">
+                <img width="190" height="265" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEArMDpLqCtEe0kLcWh5dJj0s-dAnCShz_cQ&s">
+            </div>`
             document.querySelector("body").appendChild(deckElement)
 
             const deck = deckList.trim().split("\n").flatMap(entry => {
@@ -243,11 +277,12 @@
             cardElement.innerHTML = `
             <div class="card-front">
                 <img width="190" height="265" src="${cardInfo.image}">
-                <div class="game-card-tooltip"><img width="190" height="265" src="${cardInfo.image}"></div>
             </div>
             <div class="card-back">
                 <img width="190" height="265" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEArMDpLqCtEe0kLcWh5dJj0s-dAnCShz_cQ&s">
-                <div class="game-card-tooltip"><img width="190" height="265" src="${cardInfo.image}"></div>
+            </div>
+            <div class="game-card-tooltip">
+                <img width="190" height="265" src="${cardInfo.image}">
             </div>
             `
             document.querySelector("#card-layer").appendChild(cardElement)
@@ -337,10 +372,11 @@
                         cardElement.setAttribute("data-location", "board")
                         cardElement.querySelector(".card-front").classList.remove("hidden")
                         cardElement.querySelector(".card-back").classList.add("hidden")
+                        cardElement.querySelector(".game-card-tooltip").classList.remove("hidden")
                     } else {
                         cardElement.querySelector(".card-front").classList.add("hidden")
                         cardElement.querySelector(".card-back").classList.remove("hidden")
-                        cardElement.querySelector(".card-back .game-card-tooltip").classList.add("hidden")
+                        cardElement.querySelector(".game-card-tooltip").classList.add("hidden")
                     }
                     break
 
@@ -348,6 +384,7 @@
                     cardElement.classList.remove("flipped")
                     cardElement.querySelector(".card-front").classList.remove("hidden")
                     cardElement.querySelector(".card-back").classList.add("hidden")
+                    cardElement.querySelector(".game-card-tooltip").classList.remove("hidden")
                     break
 
                 case "board":
@@ -355,10 +392,11 @@
                         if (cardElement.getAttribute("data-type") === "operation" || cardElement.getAttribute("data-type") === "identity") {
                             cardElement.querySelector(".card-front").classList.remove("hidden")
                             cardElement.querySelector(".card-back").classList.add("hidden")
+                            cardElement.querySelector(".game-card-tooltip").classList.remove("hidden")
                         } else {
                             cardElement.querySelector(".card-front").classList.add("hidden")
                             cardElement.querySelector(".card-back").classList.remove("hidden")
-                            cardElement.querySelector(".card-back .game-card-tooltip").classList.remove("hidden")
+                            cardElement.querySelector(".game-card-tooltip").classList.remove("hidden")
                         }
                     }
                     break
@@ -366,38 +404,9 @@
                 case "bin":
                     cardElement.querySelector(".card-front").classList.remove("hidden")
                     cardElement.querySelector(".card-back").classList.add("hidden")
+                    cardElement.querySelector(".game-card-tooltip").classList.remove("hidden")
                     break
             }
-
-            // if (cardLocation === "deck") {
-            //     if (cardElement.getAttribute("data-type") === "identity") {
-            //         cardElement.setAttribute("data-location", "board")
-            //         cardElement.querySelector(".card-front").classList.remove("hidden")
-            //         cardElement.querySelector(".card-back").classList.add("hidden")
-            //     } else {
-            //         cardElement.querySelector(".card-front").classList.add("hidden")
-            //         cardElement.querySelector(".card-back").classList.remove("hidden")
-            //         cardElement.querySelector(".card-back .game-card-tooltip").classList.add("hidden")
-            //     }
-            // } else if (cardLocation === "hand") {
-            //     cardElement.classList.remove("flipped")
-            //     cardElement.querySelector(".card-front").classList.remove("hidden")
-            //     cardElement.querySelector(".card-back").classList.add("hidden")
-            // } else if (cardLocation === "board") {
-            //     if (cardElement.getAttribute("data-side") === "corp") {
-            //         if (cardElement.getAttribute("data-type") === "operation") {
-            //             cardElement.querySelector(".card-front").classList.remove("hidden")
-            //             cardElement.querySelector(".card-back").classList.add("hidden")
-            //         } else {
-            //             cardElement.querySelector(".card-front").classList.add("hidden")
-            //             cardElement.querySelector(".card-back").classList.remove("hidden")
-            //             cardElement.querySelector(".card-back .game-card-tooltip").classList.remove("hidden")
-            //         }
-            //     }
-            // } else if (cardLocation === "bin") {
-            //     cardElement.querySelector(".card-front").classList.remove("hidden")
-            //     cardElement.querySelector(".card-back").classList.add("hidden")
-            // }
             if (cardElement.getAttribute("data-type") === "ice" && cardLocation === "board") {
                 cardElement.classList.add("rotated")
             } else {
@@ -445,8 +454,9 @@
             padding-left: 10px;
             padding-bottom: 10px;
             border: 5px solid black;
-            border-top-left-radius: 15px;
-            border-bottom-right-radius: 15px;
+            border-radius: 11px;
+            border-top-left-radius: 25px;
+            border-bottom-right-radius: 25px;
             background-color: black;
         }
         .game-card {
@@ -459,21 +469,31 @@
         }
         .card-front {
             transform: translate(-50%, -50%);
-            border: 2px solid black;
+            border: 3px solid black;
+            border-radius: 11px;
+            background-color: black;
+            overflow: hidden;
             position: absolute;
         }
         .card-back {
             transform: translate(-50%, -50%);
-            border: 2px solid black;
+            border: 3px solid black;
+            border-radius: 11px;
+            background-color: black;
+            overflow: hidden;
             position: absolute;
         }
 
         .game-card-tooltip {
-            border: 2px solid black;
+            border: 3px solid black;
+            border-radius: 11px;
+            background-color: black;
+            overflow: hidden;
             position: absolute;
             visibility: hidden;
-            transform: scale(3) translateY(-280px);
+            transform: scale(3.1415) translate(-30px, -230px);
         }
+
         .game-card:hover .game-card-tooltip {
             visibility: visible;
         }
@@ -494,7 +514,7 @@
             transform: translate(-50%, -50%) scale(.5) rotate(90deg);
         }
         .rotated .game-card-tooltip {
-            transform:  rotate(-90deg) scale(3) translateY(-180px) translateX(90px);
+            transform: rotate(-90deg) scale(3.1415) translate(45px, -210px);
         }
 
         .grid-container {
