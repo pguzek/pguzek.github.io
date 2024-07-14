@@ -214,7 +214,9 @@
             console.log(window.playerSide)
             if (window.playerSide !== "corp") {
                 window.playerSide = "corp";
-                [...document.querySelector("#card-layer").children].forEach(card => {
+                [...document.querySelector("#card-layer").children]
+                .filter(element => element.classList.contains("game-card"))
+                .forEach(card => {
                     card.style.left = document.querySelector("body").getBoundingClientRect().width - card.getBoundingClientRect().x + "px"
                     card.style.top = document.querySelector("body").getBoundingClientRect().height - card.getBoundingClientRect().y + "px"
                     snapToGrid(card)
@@ -234,7 +236,10 @@
             console.log(window.playerSide)
             if (window.playerSide !== "runner") {
                 window.playerSide = "runner";
-                [...document.querySelector("#card-layer").children].forEach(card => {
+                [...document.querySelector("#card-layer").children]
+                .filter(element => element.classList.contains("game-card"))
+                .forEach(card => {
+                    console.log(card)
                     card.style.left = document.querySelector("body").getBoundingClientRect().width - card.getBoundingClientRect().x + "px"
                     card.style.top = document.querySelector("body").getBoundingClientRect().height - card.getBoundingClientRect().y + "px"
                     snapToGrid(card)
