@@ -88,7 +88,7 @@
                 <h5>Decklist:</h5>
                 <div>
                     <div id="corp-deck">
-                        <textarea id="corp-identity" rows="1" cols="30" spellcheck="false" class="mb-2" title="Corporation">Pravdivost Consulting Political Solutions</textarea>
+                        <textarea id="corp-identity" rows="1" cols="30" spellcheck="false" class="mb-2" title="Corporation">Pravdivost Consulting: Political Solutions</textarea>
                         <textarea id="corp-deck-list" rows="25" cols="30" spellcheck="false">
 3x Offworld Office
 3x Orbital Superiority
@@ -113,7 +113,7 @@
                         </textarea>
                     </div>
                     <div id="runner-deck" class="hidden">
-                        <textarea id="runner-identity" rows="1" cols="30" spellcheck="false" class="mb-2" title="Runner">Nyusha "Sable" Sintashta Symphonic Prodigy</textarea>
+                        <textarea id="runner-identity" rows="1" cols="30" spellcheck="false" class="mb-2" title="Runner">Nyusha "Sable" Sintashta: Symphonic Prodigy</textarea>
                         <textarea id="runner-deck-list" rows="25" cols="30" spellcheck="false">
 1x Burner
 3x Creative Commission
@@ -253,6 +253,7 @@
 
         document.querySelector("#reload-deck-button").addEventListener("click", e => {
             document.querySelector("#card-layer").innerHTML = ""
+            setupGame()
         })
 
         async function fetchAllCards() {
@@ -297,11 +298,14 @@
             <div class="deck-card-back">
                 <img width="190" height="265" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEArMDpLqCtEe0kLcWh5dJj0s-dAnCShz_cQ&s">
             </div>`
-            document.querySelector("body").appendChild(deckElement)
+            document.querySelector("#card-layer").appendChild(deckElement)
 
             const deck = deckList.trim().split("\n").flatMap(entry => {
-                const [number, name] = entry.trim().split("x ", 2)
-                return [...new Array(parseInt(number))].map(() => name)
+                const nameParts = entry.trim().split(" ")
+                const number = parseInt(nameParts.shift().replace("x", ""))
+                const name = nameParts.join(" ")
+
+                return [...new Array(number)].map(() => name)
             }).map(cardName => allCards.find(c => c.title === cardName))
 
             shuffle(deck)
@@ -401,7 +405,6 @@
 
             const ungrab = (thisMove) => {
                 const thisUngrab = e => {
-                    console.log("ungrab", element.getAttribute("data-title"))
                     e.preventDefault()
                     document.querySelector("body").removeEventListener("mousemove", thisMove)
                     document.querySelector("body").removeEventListener("mouseup", thisUngrab)
@@ -544,13 +547,16 @@
             }
         }
 
-        createDeck(allCards, document.querySelector("#corp-deck-list").value, "85vw", "75vh")
-        const corpIndentity = document.querySelector("#corp-identity").value.trim()
-        const corpIndentityElement = createCard(allCards.find(cardInfo => cardInfo.title.replaceAll(":", "") === corpIndentity), "75vw", "75vh")
+        const setupGame = () => {
+            createDeck(allCards, document.querySelector("#corp-deck-list").value, "85vw", "75vh")
+            const corpIndentity = document.querySelector("#corp-identity").value.trim()
+            const corpIndentityElement = createCard(allCards.find(cardInfo => cardInfo.title === corpIndentity), "75vw", "75vh")
 
-        createDeck(allCards, document.querySelector("#runner-deck-list").value, "15vw", "25vh")
-        const runnerIndentity = document.querySelector("#runner-identity").value.trim()
-        const runnerIndentityElement = createCard(allCards.find(cardInfo => cardInfo.title.replaceAll(":", "") === runnerIndentity), "25vw", "25vh")
+            createDeck(allCards, document.querySelector("#runner-deck-list").value, "15vw", "25vh")
+            const runnerIndentity = document.querySelector("#runner-identity").value.trim()
+            const runnerIndentityElement = createCard(allCards.find(cardInfo => cardInfo.title === runnerIndentity), "25vw", "25vh")
+        }
+        setupGame()
     </script>
 
 
