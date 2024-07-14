@@ -21,28 +21,33 @@
             </div>
             <div class="offcanvas-body">
                 <ul>
-                    <li>Virus
-                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Virus">
-                            <img style="transform: translate(-40px, -45px);" src="assets/virus.jpg">
-                        </div>
-                    </li>
                     <li>Credit
-                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Credit">
+                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Credit/Advancement">
                             <img style="transform: translate(-40px, -45px);" src="assets/credit.jpg">
                         </div>
                     </li>
-                    <li>Counter
-                        <div class="rounded-circle" style="overflow: hidden; width: 256px; height: 256px; transform: scale(0.171875); margin: -104px;" title="Counter">
+                    <li>Advancement
+                        <div class="rounded-circle" style="overflow: hidden; width: 256px; height: 256px; transform: scale(0.171875); margin: -104px;" title="Advancement/Credit">
                             <img style="transform: translate(-0px, -0px);" src="assets/click.jpg">
                         </div>
                     </li>
+                    <li>Power
+                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Power/Virus">
+                            <img style="transform: translateX(-256px) translate(-40px, -45px);" src="assets/virus.jpg">
+                        </div>
+                    </li>
+                    <li>Virus
+                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Virus/Power">
+                            <img style="transform: translate(-40px, -45px);" src="assets/virus.jpg">
+                        </div>
+                    </li>
                     <li>Tag
-                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Tag">
+                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Tag/Bad publicity">
                             <img style="transform: translate(-40px, -45px);" src="assets/tag.jpg">
                         </div>
                     </li>
                     <li>Bad publicity
-                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Bad publicity">
+                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Bad publicity/Tag">
                             <img style="transform: translate(-40px, -45px);" src="assets/bad_publicity.jpg">
                         </div>
                     </li>
@@ -146,9 +151,18 @@
         <li id="context-menu-put-under"><a class="dropdown-item disabled">put under [MMB]</a></li>
         <li><hr class="dropdown-divider"></li>
         <li><h4 class="dropdown-header">Deck...</h4></li>
-        <li><a class="dropdown-item" href="#">shuffle in</a></li>
-        <li><a class="dropdown-item" href="#">put on top</a></li>
-        <li><a class="dropdown-item" href="#">put on bottom</a></li>
+        <li><a class="dropdown-item">shuffle in</a></li>
+        <li><a class="dropdown-item">put on top</a></li>
+        <li><a class="dropdown-item">put on bottom</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><h4 class="dropdown-header">Tokens...</h4></li>
+        <li><a class="dropdown-item">credit</a></li>
+        <li><a class="dropdown-item">advancement</a></li>
+        <li><a class="dropdown-item">power</a></li>
+        <li><a class="dropdown-item">virus</a></li>
+        <li><a class="dropdown-item">tag</a></li>
+        <li><a class="dropdown-item">bad publicity</a></li>
+        <li><a class="dropdown-item">brain damage</a></li>
     </ul>
     <!-- <div class="grid-container" style="width: 100vw; height: 100vh; position: absolute; left: 0px; top: 0px;"></div> for debugging -->
     <div id="card-layer"></div>
@@ -359,24 +373,26 @@
             const grab = e => {
                 e.preventDefault()
 
-                document.querySelector("body").addEventListener("mousemove", move)
-                document.querySelector("body").addEventListener("mouseup", ungrab)
+                const elementRect = element.getBoundingClientRect()
+                const offsetX = elementRect.x - e.clientX
+                const offsetY = elementRect.y - e.clientY
+
+                const thisMove = move(offsetX, offsetY)
+                document.querySelector("body").addEventListener("mousemove", thisMove)
+                document.querySelector("body").addEventListener("mouseup", ungrab(thisMove))
             }
 
-            const move = e => {
+            const move = (offsetX, offsetY) => e => {
                 e.preventDefault()
 
-                const x = element.getBoundingClientRect().x
-                const y = element.getBoundingClientRect().y
-
-                element.style.left = x + e.movementX + "px"
-                element.style.top = y + e.movementY + "px"
+                element.style.left = e.clientX + offsetX + "px"
+                element.style.top = e.clientY + offsetY + "px"
 
                 updateCardTooltipPosition(element)
                 updateCardHoverArea(element)
             }
 
-            const ungrab = e => {
+            const ungrab = (move) => e => {
                 e.preventDefault()
                 document.querySelector("body").removeEventListener("mousemove", move)
                 document.querySelector("body").removeEventListener("mouseup", ungrab)
@@ -628,11 +644,20 @@
 
         .game-card[data-location="hand"]:not([data-hover-location="hand"])>* {
             box-shadow:
-                0 0 5px rgba(173, 255, 47, 0.5),
-                0 0 10px rgba(173, 255, 47, 0.5),
-                0 0 20px rgba(173, 255, 47, 0.5),
-                0 0 30px rgba(173, 255, 47, 0.5),
-                0 0 40px rgba(173, 255, 47, 0.5);
+                0 0 5px rgba(165, 255, 47, 0.5),
+                0 0 10px rgba(165, 255, 47, 0.5),
+                0 0 20px rgba(165, 255, 47, 0.5),
+                0 0 30px rgba(165, 255, 47, 0.5),
+                0 0 40px rgba(165, 255, 47, 0.5);
+        }
+
+        .game-card:not([data-location="hand"])[data-hover-location="hand"]>* {
+            box-shadow:
+                0 0 5px rgba(255, 165, 0, 0.5),
+                0 0 10px rgba(255, 165, 0, 0.5),
+                0 0 20px rgba(255, 165, 0, 0.5),
+                0 0 30px rgba(255, 165, 0, 0.5),
+                0 0 40px rgba(255, 165, 0, 0.5);
         }
 
         :root {
