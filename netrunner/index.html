@@ -559,8 +559,49 @@
             createDeck(allCards, document.querySelector("#runner-deck-list").value, "15vw", "25vh")
             const runnerIndentity = document.querySelector("#runner-identity").value.trim()
             const runnerIndentityElement = createCard(allCards.find(cardInfo => cardInfo.title === runnerIndentity), "25vw", "25vh")
+
+            const peer = new window.Peer({
+                key: "netrunner",
+                debug: 4,
+                config: {
+                    iceServers: [
+                        {
+                            urls: "turn:global.relay.metered.ca:80",
+                            username: "0216de3689c0327b92c21461",
+                            credential: "fAMGCn8IVFAJA0ZZ"
+                        }
+                    ]
+                }
+            })
+
+            window.sendMessage = () => {}
+            peer.on("open", id => {
+                window.location.hash = id;
+            })
+            peer.on("connection", (connection) => {
+                setupP2PConnection(connection)
+            })
+            window.addEventListener("hashchange", () => {
+                const hostId = window.location.hash.slice().replace("#", "")
+                const connection = peer.connect(hostId)
+                setupP2PConnection(connection)
+            })
+            const setupP2PConnection = (connection) => {
+                sendMessage = (message) => connection.send(message)
+                connection.on("data", message => {
+                    alert(`Peer: ${message}`)
+                })
+                connection.on("open", () => {
+                    alert("Connection established. You can send messages now.")
+                })
+                connection.on("close", () => {
+                    alert("Data connection has been closed.")
+                });
+            }
         }
+
         setupGame()
+        document.body.onload = () => setupGame()
     </script>
 
 
@@ -728,6 +769,7 @@
             background-size: 25px 25px;
         }
     </style>
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </body>
 

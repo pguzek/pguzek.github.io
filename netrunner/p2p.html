@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="connection" style="display: block">
+    <p>My ID: <span id="my-host-id"></span></p>
+    <label for="your-host-id">Host ID: </label><input id="your-host-id" type="text"/>
+    <button onclick="window.ui.join(event)">JOIN</button>
+</div>
+<div id="game" style="display: none">
+    <label for="message">Message: </label><input id="message" type="text"/>
+    <button onclick="window.ui.send(event)">Send</button>
+</div>
+
+<script>
+    document.body.onload = () => {
+        const peer = new window.Peer("przemek", {
+            key: "netrunner",
+            debug: 4,
+            config: {
+                iceServers: [
+                    {
+                        urls: "turn:global.relay.metered.ca:80", // Replace with your TURN server URL
+                        username: "0216de3689c0327b92c21461", // Replace with your TURN username
+                        credential: "fAMGCn8IVFAJA0ZZ", // Replace with your TURN credential
+                    }
+                ]
+            }
+        });
+        let connection = null
+
+        peer.on("open", id => {
+            const element = document.getElementById("my-host-id")
+            if (element) {
+                element.innerText = id
+            }
+        })
+
+        peer.on("connection", (conn) => {
+            toggleScreen()
+            conn.on("data", data => {
+                console.log("Received", data)
+            })
+            connection = conn
+        })
+
+        const toggleScreen = () => {
+            const connection = document.getElementById("connection")
+            const game = document.getElementById("game")
+            if (connection && game) {
+                const temp = game.style.display
+                game.style.display = connection.style.display
+                connection.style.display = temp
+            }
+        }
+
+        window.ui = {
+            join() {
+                const input = document.getElementById("your-host-id")
+                if (input) {
+                    const hostId = input.value
+                    connection = peer.connect(hostId)
+                    connection.on("open", () => {
+                        toggleScreen()
+                    });
+                    conn.on("data", data => {
+                        console.log("Received", data)
+                    })
+                }
+            },
+            send() {
+                const input = document.getElementById("message")
+                if (input) {
+                    console.log("Sending", input.value)
+                    connection.send(input.value);
+                }
+            }
+        }
+    }
+</script>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+</body>
+</html>
