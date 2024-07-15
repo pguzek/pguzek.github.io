@@ -167,10 +167,55 @@
     <div id="card-layer"></div>
 
 
+    <script>
+        window.randomUUID = () => {
+            window.lastUUID = window.lastUUID || 0
+            return ++window.lastUUID
+        }
 
+        function throttle(func, wait, options) {
+            var timeout, context, args, result;
+            var previous = 0;
+            if (!options) options = {};
 
+            var later = function() {
+                previous = options.leading === false ? 0 : now();
+                timeout = null;
+                result = func.apply(context, args);
+                if (!timeout) context = args = null;
+            };
 
+            var throttled = function() {
+                var _now = now();
+                if (!previous && options.leading === false) previous = _now;
+                var remaining = wait - (_now - previous);
+                context = this;
+                args = arguments;
+                if (remaining <= 0 || remaining > wait) {
+                    if (timeout) {
+                        clearTimeout(timeout);
+                        timeout = null;
+                    }
+                    previous = _now;
+                    result = func.apply(context, args);
+                    if (!timeout) context = args = null;
+                } else if (!timeout && options.trailing !== false) {
+                    timeout = setTimeout(later, remaining);
+                }
+                return result;
+            };
+
+            throttled.cancel = function() {
+                clearTimeout(timeout);
+                previous = 0;
+                timeout = context = args = null;
+            };
+
+            return throttled;
+        }
+    </script>
     <script type="module">
+        window.sendMessage = () => {}
         window.playerSide = "corp"
 
         document.addEventListener("click", e => {
@@ -325,7 +370,7 @@
             cardElement.setAttribute("data-faction", cardInfo.faction_code)
             cardElement.setAttribute("data-type", cardInfo.type_code)
             cardElement.setAttribute("data-location", "deck")
-            cardElement.setAttribute("id", crypto.randomUUID())
+            cardElement.setAttribute("id", randomUUID())
             cardElement.style = `left: ${x}; top: ${y};`
             cardElement.classList.add("game-card")
             cardElement.innerHTML = `
@@ -473,7 +518,14 @@
         }
 
         const handleCardBehavior = (cardElement) => {
+            const cardId = cardElement.getAttribute("id")
             const cardLocation = cardElement.getAttribute("data-location")
+            window.sendMessage({
+                id: cardId,
+                location: cardLocation,
+                x: cardElement.style.left,
+                y: cardElement.style.top
+            })
 
             switch (cardLocation) {
                 case "deck":
@@ -574,7 +626,6 @@
                 }
             })
 
-            window.sendMessage = () => {}
             peer.on("open", id => {
                 window.location.hash = id;
             })
@@ -587,15 +638,18 @@
                 setupP2PConnection(connection)
             })
             const setupP2PConnection = (connection) => {
-                sendMessage = (message) => connection.send(message)
-                connection.on("data", message => {
-                    alert(`Peer: ${message}`)
+                sendMessage = (message) => window.throttle(connection.send(message), 250)
+                connection.on("data", object => {
+                    console.log(`Peer:`, object)
+                    const element = document.getElementById(object.id)
+                    element.style.left = object.x
+                    element.style.top = object.y
                 })
                 connection.on("open", () => {
-                    alert("Connection established. You can send messages now.")
+                    console.log("Connection established. You can send messages now.")
                 })
                 connection.on("close", () => {
-                    alert("Data connection has been closed.")
+                    console.log("Data connection has been closed.")
                 });
             }
         }
