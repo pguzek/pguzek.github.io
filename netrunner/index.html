@@ -476,9 +476,8 @@
                             tokens.forEach(token => {
                                 if (isPointWithinElement(rect.x, rect.y, token.firstElementChild)) {
                                     token.append(element)
-                                    const tokenRect = token.getBoundingClientRect()
-                                    element.style.left = (rect.x - tokenRect.x) + "px"
-                                    element.style.top = (rect.y - tokenRect.y) + "px"
+                                    element.style.left = "0px"
+                                    element.style.top = "15px"
                                 }
                             })
                         }
