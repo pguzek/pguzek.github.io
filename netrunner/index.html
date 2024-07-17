@@ -14,48 +14,51 @@
 
 <body>
     <div>
-        <div id="resource-panel" class="offcanvas offcanvas-start" style="background-color: aliceblue;" tabindex="-1">
+        <div id="resource-panel" class="offcanvas offcanvas-start" style="background-color: aliceblue; z-index: 15;" tabindex="-1">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title">Resource panel</h5>
             </div>
-            <div class="offcanvas-body">
+            <div class="offcanvas-body d-flex flex-column">
                 <ul>
                     <li>Credit
-                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Credit/Advancement">
-                            <img style="transform: translate(-40px, -45px);" src="assets/credit.jpg">
+                        <div id="credit" class="border border-5 border-black rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Credit / Advancement">
+                            <img style="transform: translate(-45px, -50px);" src="assets/credit.jpg">
                         </div>
                     </li>
                     <li>Advancement
-                        <div class="rounded-circle" style="overflow: hidden; width: 256px; height: 256px; transform: scale(0.171875); margin: -104px;" title="Advancement/Credit">
-                            <img style="transform: translate(-0px, -0px);" src="assets/click.jpg">
+                        <div id="advancement" class="border border-5 border-black rounded-circle" style="overflow: hidden; width: 256px; height: 256px; transform: scale(0.171875); margin: -104px;" title="Advancement / Credit">
+                            <img style="transform: translate(-4px, -5px);" src="assets/click.jpg">
                         </div>
                     </li>
                     <li>Power
-                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Power/Virus">
-                            <img style="transform: translateX(-256px) translate(-40px, -45px);" src="assets/virus.jpg">
+                        <div id="power" class="border border-5 border-black rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Power / Virus">
+                            <img style="transform: translateX(-256px) translate(-45px, -47px);" src="assets/virus.jpg">
                         </div>
                     </li>
                     <li>Virus
-                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Virus/Power">
-                            <img style="transform: translate(-40px, -45px);" src="assets/virus.jpg">
+                        <div id="virus" class="border border-5 border-black rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Virus / Power">
+                            <img style="transform: translate(-45px, -47px);" src="assets/virus.jpg">
                         </div>
                     </li>
                     <li>Tag
-                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Tag/Bad publicity">
-                            <img style="transform: translate(-40px, -45px);" src="assets/tag.jpg">
+                        <div id="tag" class="border border-5 border-black rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Tag / Bad publicity">
+                            <img style="transform: translate(-45px, -50px);" src="assets/tag.jpg">
                         </div>
                     </li>
                     <li>Bad publicity
-                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Bad publicity/Tag">
+                        <div id="bad-publicity" class="border border-5 border-black rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Bad publicity / Tag">
                             <img style="transform: translate(-40px, -45px);" src="assets/bad_publicity.jpg">
                         </div>
                     </li>
                     <li>Brain damage
-                        <div class="rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Brain damage">
-                            <img style="transform: translate(-40px, -45px); position: absolute;" src="assets/brain_damage.jpg">
+                        <div id="brain-damage" class="border border-5 border-black rounded-circle" style="overflow: hidden; width: 176px; height: 176px; transform: scale(.25); margin: -64px;" title="Brain damage">
+                            <img style="transform: translate(-45px, -50px); position: absolute;" src="assets/brain_damage.jpg">
                         </div>
                     </li>
                 </ul>
+                <div id="token-bin" class="flex-fill m-2 token-bin">
+                    <div class="text-center"><h1>Trash tokens</h1></div>
+                </div>
             </div>
         </div>
         <div id="open-resource-panel" class="btn btn-primary rounded-end fw-bold px-1"  style="position: fixed; top: 45vh; border-radius: 0; writing-mode: vertical-lr;">Resource panel</div>
@@ -287,9 +290,18 @@
         function snapToGrid(element, grid = 25) {
             const left = Math.round(element.getBoundingClientRect().x / grid) * grid
             const top = Math.round(element.getBoundingClientRect().y / grid) * grid
-            // console.log(element.getBoundingClientRect().x, element.getBoundingClientRect().y, left, top, element)
             element.style.left = `${left}px`;
             element.style.top = `${top}px`;
+        }
+
+        function isPointWithinElement(x, y, element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                x >= rect.left &&
+                x <= rect.right &&
+                y >= rect.top &&
+                y <= rect.bottom
+            )
         }
 
         const createDeck = (allCards, deckList, x, y) => {
@@ -403,8 +415,17 @@
                 element.style.left = e.clientX + offsetX + "px"
                 element.style.top = e.clientY + offsetY + "px"
 
-                updateCardTooltipPosition(element)
-                updateCardHoverArea(element)
+                if (element.classList.contains("game-card")) { //TODO
+                    updateCardTooltipPosition(element)
+                    updateCardHoverArea(element)
+                } else if (element.classList.contains("token")) {
+                    const tokenBin = document.querySelector("#token-bin")
+                    if (isPointWithinElement(e.clientX + offsetX, e.clientY + offsetY, tokenBin)) {
+                        tokenBin.classList.add("token-bin-active")
+                    } else {
+                        tokenBin.classList.remove("token-bin-active")
+                    }
+                }
             }
 
             const ungrab = (thisMove) => {
@@ -413,10 +434,19 @@
                     document.querySelector("body").removeEventListener("mousemove", thisMove)
                     document.querySelector("body").removeEventListener("mouseup", thisUngrab)
 
-                    snapToGrid(element)
                     updateCardOrder(element)
-                    updateCardArea(element)
-                    handleCardBehavior(element)
+                    if (element.classList.contains("game-card")) { //TODO
+                        snapToGrid(element)
+                        updateCardArea(element)
+                        handleCardBehavior(element)
+                    } else if (element.classList.contains("token")) {
+                        const tokenBin = document.querySelector("#token-bin")
+                        const rect = element.getBoundingClientRect()
+                        if (isPointWithinElement(rect.x, rect.y, tokenBin)) {
+                            element.remove()
+                            tokenBin.classList.remove("token-bin-active")
+                        }
+                    }
                 }
                 return thisUngrab
             }
@@ -551,6 +581,48 @@
             }
         }
 
+        const createToken = (tokenName, x, y) => {
+            const tokenElement = document.createElement("div")
+
+            const innerElement = document.querySelector("#" + tokenName).cloneNode(true)
+            innerElement.style.position = "absolute";
+            innerElement.style.transform += "translate(-50%, -50%) translate(-10px, -10px)"
+            tokenElement.append(innerElement)
+
+            tokenElement.id = crypto.randomUUID()
+            tokenElement.classList.add("token")
+            tokenElement.style.left = x
+            tokenElement.style.top = y
+            tokenElement.addEventListener("mousedown", grabCard(tokenElement))
+
+            const dualTokens = [
+                ["credit", "advancement"],
+                ["advancement", "credit"],
+                ["power", "virus"],
+                ["virus", "power"],
+                ["tag", "bad-publicity"],
+                ["bad-publicity", "tag"]
+            ]
+            dualTokens.filter(([key, value]) => key === tokenName).forEach(([key, value]) => {
+                tokenElement.addEventListener("dblclick", e => {
+                    e.preventDefault()
+                    createToken(value, tokenElement.style.left, tokenElement.style.top).id = tokenElement.id
+                    tokenElement.remove()
+                })
+            })
+            document.querySelector("#card-layer").appendChild(tokenElement)
+            return tokenElement
+        }
+
+        ["credit", "advancement", "power", "virus", "tag", "bad-publicity", "brain-damage"].forEach(tokenName => {
+            document.querySelector("#" + tokenName).addEventListener("mousedown", e => {
+                e.preventDefault()
+
+                const tokenElement = createToken(tokenName, e.clientX + "px", e.clientY + "px")
+                grabCard(tokenElement)(e)
+            })
+        })
+
         const setupGame = () => {
             createDeck(allCards, document.querySelector("#corp-deck-list").value, "85vw", "75vh")
             const corpIndentity = document.querySelector("#corp-identity").value.trim()
@@ -660,6 +732,24 @@
         }
         .rotated .game-card-tooltip {
             transform: rotate(-90deg) scale(3.1415) translate(45px, -210px) var(--force-in-view);
+        }
+
+        .token {
+            position: absolute;
+            z-index: 20;
+        }
+        .token:hover {
+            z-index: 25;
+        }
+        .token-bin {
+            border: 1px lightgrey dashed;
+            border-radius: 15px;
+            border-width: 3px;
+            color: lightgrey;
+        }
+        .token-bin-active {
+            color: red;
+            border-color: red;
         }
 
         .game-card[data-location="hand"]:not([data-hover-location="hand"])>* {
