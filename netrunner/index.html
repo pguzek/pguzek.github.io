@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-        <div id="open-resource-panel" class="btn btn-primary rounded-end fw-bold px-1"  style="position: fixed; top: 45vh; border-radius: 0; writing-mode: vertical-lr;">Resource panel</div>
+        <div id="open-resource-panel" class="btn btn-primary text-nowrap rounded-end fw-bold px-1" style="position: fixed; top: 45vh; border-radius: 0; writing-mode: vertical-lr;">Resource panel</div>
         
         <div class="flex-container">
             <div id="opponent-hand" class="player-hand"><h1 id="opponent-title" class="text-secondary p-3">Runner</h1></div>
@@ -72,7 +72,7 @@
             <div id="your-hand" class="player-hand"><h1 id="your-title" class="text-secondary p-3">Corporation</h1></div>
         </div>
 
-        <div id="open-player-panel" class="btn btn-primary rounded-start fw-bold px-1" style="position: fixed; top: 45vh; left: 100vw; border-radius: 0; writing-mode: sideways-lr; transform: translateX(-100%);">Player panel</div>
+        <div id="open-player-panel" class="btn btn-primary text-nowrap rounded-end fw-bold px-1" style="position: fixed; top: 45vh; left: 100vw; border-radius: 0; writing-mode: vertical-lr; transform: translateX(-100%) rotate(180deg);">Player panel</div>
         <div id="player-panel" class="offcanvas offcanvas-end" style="background-color: aliceblue;" tabindex="-1">
             <div class="offcanvas-header">
                 <h4 class="offcanvas-title">Player panel</h4>
@@ -764,6 +764,8 @@
             position: absolute;
             visibility: hidden;
             transform: scale(3.1415) translate(-30px, -230px) var(--force-in-view);
+            
+            z-index: 3099;
         }
 
         .game-card:hover .game-card-tooltip {
