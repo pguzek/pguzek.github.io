@@ -8,7 +8,10 @@
     <div style="display: none;">
         TODO:
         - deck cotaining cards
-        - tokens
+        - token context menu
+        - card context menu
+        - add custom events for grab, move, ungrab
+        - select oldest card art, lowest id?
     </div>
 </head>
 
@@ -211,13 +214,8 @@
             resourcePanel.classList.add("hiding")
         })
 
-        document.querySelector("#corp-check").checked = "true"
-        document.querySelector("#corp-check").addEventListener("click", e => {
-            console.log(window.playerSide)
-            if (window.playerSide !== "corp") {
-                window.playerSide = "corp";
-                [...document.querySelector("#card-layer").children]
-                .filter(element => element.classList.contains("game-card"))
+        const flipBoard = () => {
+            [...document.querySelectorAll("#card-layer>.game-card")]
                 .forEach(card => {
                     card.style.left = document.querySelector("body").getBoundingClientRect().width - card.getBoundingClientRect().x + "px"
                     card.style.top = document.querySelector("body").getBoundingClientRect().height - card.getBoundingClientRect().y + "px"
@@ -226,7 +224,20 @@
                     updateCardArea(card)
                     updateCardHoverArea(card)
                     handleCardBehavior(card)
+                });
+            [...document.querySelectorAll("#card-layer>.token")]
+                .forEach(token => {
+                    token.style.left = document.querySelector("body").getBoundingClientRect().width - token.getBoundingClientRect().x + "px"
+                    token.style.top = document.querySelector("body").getBoundingClientRect().height - token.getBoundingClientRect().y + "px"
+                    snapToGrid(token, 15)
                 })
+        }
+        document.querySelector("#corp-check").checked = "true"
+        document.querySelector("#corp-check").addEventListener("click", e => {
+            console.log(window.playerSide)
+            if (window.playerSide !== "corp") {
+                window.playerSide = "corp"
+                flipBoard()
             }
             document.querySelector("#your-title").innerText = "Corporation"
             document.querySelector("#opponent-title").innerText = "Runner"
@@ -237,19 +248,8 @@
         document.querySelector("#runner-check").addEventListener("click", e => {
             console.log(window.playerSide)
             if (window.playerSide !== "runner") {
-                window.playerSide = "runner";
-                [...document.querySelector("#card-layer").children]
-                .filter(element => element.classList.contains("game-card"))
-                .forEach(card => {
-                    console.log(card)
-                    card.style.left = document.querySelector("body").getBoundingClientRect().width - card.getBoundingClientRect().x + "px"
-                    card.style.top = document.querySelector("body").getBoundingClientRect().height - card.getBoundingClientRect().y + "px"
-                    snapToGrid(card)
-                    updateCardTooltipPosition(card)
-                    updateCardArea(card)
-                    updateCardHoverArea(card)
-                    handleCardBehavior(card)
-                })
+                window.playerSide = "runner"
+                flipBoard()
             }
             document.querySelector("#your-title").innerText = "Runner"
             document.querySelector("#opponent-title").innerText = "Corporation"
@@ -397,20 +397,30 @@
 
         const grabCard = (element) => {
             const grab = e => {
-                e.preventDefault()
+                if (e.button === 0) {
+                    e.preventDefault()
+                    e.stopPropagation()
 
-                const elementRect = element.getBoundingClientRect()
-                const offsetX = elementRect.x - e.clientX
-                const offsetY = elementRect.y - e.clientY
+                    const elementRect = element.getBoundingClientRect()
+                    const offsetX = elementRect.x - e.clientX
+                    const offsetY = elementRect.y - e.clientY
 
-                const thisMove = move(offsetX, offsetY)
-                const thisUngrab = ungrab(thisMove)
-                document.querySelector("body").addEventListener("mousemove", thisMove)
-                document.querySelector("body").addEventListener("mouseup", thisUngrab)
+                    const thisMove = move(offsetX, offsetY)
+                    const thisUngrab = ungrab(thisMove)
+                    document.querySelector("body").addEventListener("mousemove", thisMove)
+                    document.querySelector("body").addEventListener("mouseup", thisUngrab)
+
+                    if (element.classList.contains("token")) {
+                        updateCardOrder(element)
+                        element.style.left = elementRect.x + "px"
+                        element.style.top = elementRect.y + "px"
+                    }
+                }
             }
 
             const move = (offsetX, offsetY) => e => {
                 e.preventDefault()
+                e.stopPropagation()
 
                 element.style.left = e.clientX + offsetX + "px"
                 element.style.top = e.clientY + offsetY + "px"
@@ -431,6 +441,7 @@
             const ungrab = (thisMove) => {
                 const thisUngrab = e => {
                     e.preventDefault()
+                    e.stopPropagation()
                     document.querySelector("body").removeEventListener("mousemove", thisMove)
                     document.querySelector("body").removeEventListener("mouseup", thisUngrab)
 
@@ -440,11 +451,36 @@
                         updateCardArea(element)
                         handleCardBehavior(element)
                     } else if (element.classList.contains("token")) {
+                        snapToGrid(element, 15)
                         const tokenBin = document.querySelector("#token-bin")
                         const rect = element.getBoundingClientRect()
                         if (isPointWithinElement(rect.x, rect.y, tokenBin)) {
                             element.remove()
                             tokenBin.classList.remove("token-bin-active")
+                        } else {
+                            const cards = [...document.querySelectorAll(".game-card")]
+                            cards.forEach(card => {
+                                if (isPointWithinElement(rect.x, rect.y, [...card.children].find(child => getComputedStyle(child).display !== "none"))) {
+                                    card.append(element)
+                                    const cardRect = card.getBoundingClientRect()
+                                    if (card.classList.contains("rotated")) {
+                                        element.style.left = (rect.y - cardRect.y) * 2 + "px"
+                                        element.style.top = -(rect.x - cardRect.x) * 2 + "px"
+                                    } else {
+                                        element.style.left = (rect.x - cardRect.x) * 2 + "px"
+                                        element.style.top = (rect.y - cardRect.y) * 2 + "px"
+                                    }
+                                }
+                            })
+                            const tokens = [...document.querySelectorAll(`.token`)].filter(t => t.id !== element.id && !element.contains(t))
+                            tokens.forEach(token => {
+                                if (isPointWithinElement(rect.x, rect.y, token.firstElementChild)) {
+                                    token.append(element)
+                                    const tokenRect = token.getBoundingClientRect()
+                                    element.style.left = (rect.x - tokenRect.x) + "px"
+                                    element.style.top = (rect.y - tokenRect.y) + "px"
+                                }
+                            })
                         }
                     }
                 }
@@ -544,7 +580,6 @@
                     }
                     const yourHandY = document.querySelector("#your-hand").getBoundingClientRect().y
                     const cardY = cardElement.getBoundingClientRect().y
-                    console.log((yourHandY - cardY))
                     if (yourHandY - cardY < 75) {
                         cardElement.style.top = cardY - (75 - (yourHandY - cardY)) + "px"
                         snapToGrid(cardElement)
@@ -606,9 +641,31 @@
             dualTokens.filter(([key, value]) => key === tokenName).forEach(([key, value]) => {
                 tokenElement.addEventListener("dblclick", e => {
                     e.preventDefault()
-                    createToken(value, tokenElement.style.left, tokenElement.style.top).id = tokenElement.id
-                    tokenElement.remove()
+                    e.stopPropagation()
+
+                    function flipToken(tokenElement) {
+                        const newTokenName = tokenElement.firstElementChild.id === key ? value : tokenElement.firstElementChild.id === value ? key : tokenElement.firstElementChild.id
+                        const newInnerElement = document.querySelector("#" + newTokenName).cloneNode(true)
+                        newInnerElement.style.position = "absolute";
+                        newInnerElement.style.transform += "translate(-50%, -50%) translate(-10px, -10px)"
+                        tokenElement.replaceChild(newInnerElement, tokenElement.firstElementChild)
+
+                        const stactedToken = tokenElement.querySelector(".token")
+                        if (stactedToken) {
+                            flipToken(stactedToken)
+                        }
+                    }
+                    flipToken(tokenElement)
                 })
+            })
+            tokenElement.addEventListener("auxclick", e => {
+                e.preventDefault()
+                e.stopPropagation()
+
+                if (e.button === 1) {
+                    const lastTokenInStack = tokenElement.querySelector("div:only-child").parentElement
+                    lastTokenInStack.append(createToken(tokenElement.firstElementChild.id, "0px", "15px"))
+                }
             })
             document.querySelector("#card-layer").appendChild(tokenElement)
             return tokenElement
@@ -737,6 +794,13 @@
         .token {
             position: absolute;
             z-index: 20;
+            display: block !important;
+        }
+        .game-card>.token {
+            transform: scale(2) translate(50%, 50%);
+        }
+        .game-card.rotated>.token {
+            transform: rotate(-90deg) scale(2) translate(50%, 50%);
         }
         .token:hover {
             z-index: 25;
