@@ -64,7 +64,9 @@
                 </div>
             </div>
         </div>
-        <div id="open-resource-panel" class="btn btn-primary text-nowrap rounded-end fw-bold px-1" style="position: fixed; top: 45vh; border-radius: 0; writing-mode: vertical-lr;">Resource panel</div>
+        <div id="open-resource-panel" class="btn btn-primary text-nowrap rounded-end fw-bold px-1" style="position: fixed; top: 45vh; border-radius: 0; writing-mode: vertical-lr;">
+            Resource panel
+        </div>
         
         <div class="flex-container">
             <div id="opponent-hand" class="player-hand"><h1 id="opponent-title" class="text-secondary p-3">Runner</h1></div>
@@ -72,7 +74,9 @@
             <div id="your-hand" class="player-hand"><h1 id="your-title" class="text-secondary p-3">Corporation</h1></div>
         </div>
 
-        <div id="open-player-panel" class="btn btn-primary text-nowrap rounded-end fw-bold px-1" style="position: fixed; top: 45vh; left: 100vw; border-radius: 0; writing-mode: vertical-lr; transform: translateX(-100%) rotate(180deg);">Player panel</div>
+        <div id="open-player-panel" class="btn btn-primary text-nowrap rounded-end fw-bold px-1" style="position: fixed; top: 45vh; left: 100vw; border-radius: 0; writing-mode: vertical-lr; transform: translateX(-100%) rotate(180deg);">
+            Player panel
+        </div>
         <div id="player-panel" class="offcanvas offcanvas-end" style="background-color: aliceblue;" tabindex="-1">
             <div class="offcanvas-header">
                 <h4 class="offcanvas-title">Player panel</h4>
@@ -93,8 +97,8 @@
                 <h5>Decklist:</h5>
                 <div>
                     <div id="corp-deck">
-                        <textarea id="corp-identity" rows="1" cols="30" spellcheck="false" class="mb-2" title="Corporation">Pravdivost Consulting: Political Solutions</textarea>
-                        <textarea id="corp-deck-list" rows="25" cols="30" spellcheck="false">
+                        <textarea id="corp-identity" rows="1" cols="35" spellcheck="false" class="mb-2" title="Corporation">Pravdivost Consulting: Political Solutions</textarea>
+                        <textarea id="corp-deck-list" rows="25" cols="35" spellcheck="false">
 3x Offworld Office
 3x Orbital Superiority
 3x Send a Message
@@ -118,8 +122,8 @@
                         </textarea>
                     </div>
                     <div id="runner-deck" class="hidden">
-                        <textarea id="runner-identity" rows="1" cols="30" spellcheck="false" class="mb-2" title="Runner">Nyusha "Sable" Sintashta: Symphonic Prodigy</textarea>
-                        <textarea id="runner-deck-list" rows="25" cols="30" spellcheck="false">
+                        <textarea id="runner-identity" rows="1" cols="35" spellcheck="false" class="mb-2" title="Runner">Nyusha "Sable" Sintashta: Symphonic Prodigy</textarea>
+                        <textarea id="runner-deck-list" rows="25" cols="35" spellcheck="false">
 1x Burner
 3x Creative Commission
 3x Diesel
@@ -461,7 +465,7 @@
                             const cards = [...document.querySelectorAll(".game-card")]
                             cards.forEach(card => {
                                 if (isPointWithinElement(rect.x, rect.y, [...card.children].find(child => getComputedStyle(child).display !== "none"))) {
-                                    card.append(element)
+                                    card.appendChild(element)
                                     const cardRect = card.getBoundingClientRect()
                                     if (card.classList.contains("rotated")) {
                                         element.style.left = (rect.y - cardRect.y) * 2 + "px"
@@ -475,7 +479,7 @@
                             const tokens = [...document.querySelectorAll(`.token`)].filter(t => t.id !== element.id && !element.contains(t))
                             tokens.forEach(token => {
                                 if (isPointWithinElement(rect.x, rect.y, token.firstElementChild)) {
-                                    token.append(element)
+                                    token.appendChild(element)
                                     element.style.left = "0px"
                                     element.style.top = "15px"
                                 }
@@ -491,7 +495,10 @@
 
         const updateCardOrder = (cardElement) => {
             const cardLayer = document.querySelector("#card-layer")
-            cardLayer.append(cardElement)
+            if (cardLayer.lastElementChild !== cardElement) {
+                cardLayer.appendChild(cardElement)
+                cardElement.click()
+            }
         }
 
         const updateCardTooltipPosition = (cardElement) => {
@@ -621,7 +628,7 @@
             const innerElement = document.querySelector("#" + tokenName).cloneNode(true)
             innerElement.style.position = "absolute";
             innerElement.style.transform += "translate(-50%, -50%) translate(-10px, -10px)"
-            tokenElement.append(innerElement)
+            tokenElement.appendChild(innerElement)
 
             tokenElement.id = crypto.randomUUID()
             tokenElement.classList.add("token")
@@ -663,7 +670,7 @@
 
                 if (e.button === 1) {
                     const lastTokenInStack = tokenElement.querySelector("div:only-child").parentElement
-                    lastTokenInStack.append(createToken(tokenElement.firstElementChild.id, "0px", "15px"))
+                    lastTokenInStack.appendChild(createToken(tokenElement.firstElementChild.id, "0px", "15px"))
                 }
             })
             document.querySelector("#card-layer").appendChild(tokenElement)
