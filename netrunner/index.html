@@ -361,6 +361,19 @@
             cardElement.addEventListener("dblclick", flipCard(cardElement))
             cardElement.addEventListener("auxclick", putCardUnder(cardElement))
             cardElement.addEventListener("contextmenu", cardContextMenu(cardElement))
+            cardElement.addEventListener("grab", e => {
+                updateCardOrder(cardElement)
+            })
+            cardElement.addEventListener("move", e => {
+                updateCardTooltipPosition(cardElement)
+                updateCardHoverArea(cardElement)
+            })
+            cardElement.addEventListener("ungrab", e => {
+                updateCardOrder(cardElement)
+                snapToGrid(cardElement)
+                updateCardArea(cardElement)
+                handleCardBehavior(cardElement)
+            })
             snapToGrid(cardElement)
             updateCardTooltipPosition(cardElement)
             handleCardBehavior(cardElement)
@@ -414,11 +427,7 @@
                     document.querySelector("body").addEventListener("mousemove", thisMove)
                     document.querySelector("body").addEventListener("mouseup", thisUngrab)
 
-                    if (element.classList.contains("token")) {
-                        updateCardOrder(element)
-                        element.style.left = elementRect.x + "px"
-                        element.style.top = elementRect.y + "px"
-                    }
+                    element.dispatchEvent(new CustomEvent("grab", {detail: {targetX: elementRect.x, targetY: elementRect.y}}))
                 }
             }
 
@@ -429,17 +438,7 @@
                 element.style.left = e.clientX + offsetX + "px"
                 element.style.top = e.clientY + offsetY + "px"
 
-                if (element.classList.contains("game-card")) { //TODO
-                    updateCardTooltipPosition(element)
-                    updateCardHoverArea(element)
-                } else if (element.classList.contains("token")) {
-                    const tokenBin = document.querySelector("#token-bin")
-                    if (isPointWithinElement(e.clientX + offsetX, e.clientY + offsetY, tokenBin)) {
-                        tokenBin.classList.add("token-bin-active")
-                    } else {
-                        tokenBin.classList.remove("token-bin-active")
-                    }
-                }
+                element.dispatchEvent(new CustomEvent("move", {detail: {targetX: e.clientX + offsetX, targetY: e.clientY + offsetY}}))
             }
 
             const ungrab = (thisMove) => {
@@ -449,43 +448,8 @@
                     document.querySelector("body").removeEventListener("mousemove", thisMove)
                     document.querySelector("body").removeEventListener("mouseup", thisUngrab)
 
-                    updateCardOrder(element)
-                    if (element.classList.contains("game-card")) { //TODO
-                        snapToGrid(element)
-                        updateCardArea(element)
-                        handleCardBehavior(element)
-                    } else if (element.classList.contains("token")) {
-                        snapToGrid(element, 15)
-                        const tokenBin = document.querySelector("#token-bin")
-                        const rect = element.getBoundingClientRect()
-                        if (isPointWithinElement(rect.x, rect.y, tokenBin)) {
-                            element.remove()
-                            tokenBin.classList.remove("token-bin-active")
-                        } else {
-                            const cards = [...document.querySelectorAll(".game-card")]
-                            cards.forEach(card => {
-                                if (isPointWithinElement(rect.x, rect.y, [...card.children].find(child => getComputedStyle(child).display !== "none"))) {
-                                    card.appendChild(element)
-                                    const cardRect = card.getBoundingClientRect()
-                                    if (card.classList.contains("rotated")) {
-                                        element.style.left = (rect.y - cardRect.y) * 2 + "px"
-                                        element.style.top = -(rect.x - cardRect.x) * 2 + "px"
-                                    } else {
-                                        element.style.left = (rect.x - cardRect.x) * 2 + "px"
-                                        element.style.top = (rect.y - cardRect.y) * 2 + "px"
-                                    }
-                                }
-                            })
-                            const tokens = [...document.querySelectorAll(`.token`)].filter(t => t.id !== element.id && !element.contains(t))
-                            tokens.forEach(token => {
-                                if (isPointWithinElement(rect.x, rect.y, token.firstElementChild)) {
-                                    token.appendChild(element)
-                                    element.style.left = "0px"
-                                    element.style.top = "15px"
-                                }
-                            })
-                        }
-                    }
+                    const elementRect = element.getBoundingClientRect()
+                    element.dispatchEvent(new CustomEvent("ungrab", {detail: {targetX: elementRect.x, targetY: elementRect.y}}))
                 }
                 return thisUngrab
             }
@@ -635,6 +599,28 @@
             tokenElement.style.left = x
             tokenElement.style.top = y
             tokenElement.addEventListener("mousedown", grabCard(tokenElement))
+            tokenElement.addEventListener("grab", e => {
+                updateCardOrder(tokenElement)
+                tokenElement.style.left = e.detail.targetX + "px"
+                tokenElement.style.top = e.detail.targetY + "px"
+            })
+            tokenElement.addEventListener("move", e => {
+                tryActivateBin(e)
+            })
+            tokenElement.addEventListener("ungrab", e => {
+                updateCardOrder(tokenElement)
+                snapToGrid(tokenElement, 15)
+                const tokenRect = tokenElement.getBoundingClientRect()
+
+                const tokenBin = document.querySelector("#token-bin")
+                if (isPointWithinElement(tokenRect.x, tokenRect.y, tokenBin)) {
+                    tokenElement.remove()
+                    tokenBin.classList.remove("token-bin-active")
+                } else {
+                    tryPutTokenOnCard(tokenElement, tokenRect)
+                    tryPutTokenOnToken(tokenElement, tokenRect)
+                }
+            })
 
             const dualTokens = [
                 ["credit", "advancement"],
@@ -648,19 +634,7 @@
                 tokenElement.addEventListener("dblclick", e => {
                     e.preventDefault()
                     e.stopPropagation()
-
-                    function flipToken(tokenElement) {
-                        const newTokenName = tokenElement.firstElementChild.id === key ? value : tokenElement.firstElementChild.id === value ? key : tokenElement.firstElementChild.id
-                        const newInnerElement = document.querySelector("#" + newTokenName).cloneNode(true)
-                        newInnerElement.style.position = "absolute";
-                        newInnerElement.style.transform += "translate(-50%, -50%) translate(-10px, -10px)"
-                        tokenElement.replaceChild(newInnerElement, tokenElement.firstElementChild)
-
-                        const stactedToken = tokenElement.querySelector(".token")
-                        if (stactedToken) {
-                            flipToken(stactedToken)
-                        }
-                    }
+                    
                     flipToken(tokenElement)
                 })
             })
@@ -675,6 +649,56 @@
             })
             document.querySelector("#card-layer").appendChild(tokenElement)
             return tokenElement
+        }
+
+        function tryActivateBin(moveEvent) {
+            const tokenBin = document.querySelector("#token-bin")
+            if (isPointWithinElement(moveEvent.detail.targetX, moveEvent.detail.targetY, tokenBin)) {
+                tokenBin.classList.add("token-bin-active")
+            } else {
+                tokenBin.classList.remove("token-bin-active")
+            }
+        }
+
+        function tryPutTokenOnCard(tokenElement, tokenRect) {
+            const cards = [...document.querySelectorAll(".game-card")]
+            cards.forEach(card => {
+                if (isPointWithinElement(tokenRect.x, tokenRect.y, [...card.children].find(child => getComputedStyle(child).display !== "none"))) {
+                    card.appendChild(tokenElement)
+                    const cardRect = card.getBoundingClientRect()
+                    if (card.classList.contains("rotated")) {
+                        tokenElement.style.left = (tokenRect.y - cardRect.y) * 2 + "px"
+                        tokenElement.style.top = -(tokenRect.x - cardRect.x) * 2 + "px"
+                    } else {
+                        tokenElement.style.left = (tokenRect.x - cardRect.x) * 2 + "px"
+                        tokenElement.style.top = (tokenRect.y - cardRect.y) * 2 + "px"
+                    }
+                }
+            })
+        }
+        
+        function tryPutTokenOnToken(tokenElement, tokenRect) {
+            const tokens = [...document.querySelectorAll(`.token`)].filter(t => t.id !== tokenElement.id && !tokenElement.contains(t))
+            tokens.forEach(token => {
+                if (isPointWithinElement(tokenRect.x, tokenRect.y, token.firstElementChild)) {
+                    token.appendChild(tokenElement)
+                    tokenElement.style.left = "0px"
+                    tokenElement.style.top = "15px"
+                }
+            })
+        }
+        
+        function flipToken(tokenElement) {
+            const newTokenName = tokenElement.firstElementChild.id === key ? value : tokenElement.firstElementChild.id === value ? key : tokenElement.firstElementChild.id
+            const newInnerElement = document.querySelector("#" + newTokenName).cloneNode(true)
+            newInnerElement.style.position = "absolute";
+            newInnerElement.style.transform += "translate(-50%, -50%) translate(-10px, -10px)"
+            tokenElement.replaceChild(newInnerElement, tokenElement.firstElementChild)
+
+            const stactedToken = tokenElement.querySelector(".token")
+            if (stactedToken) {
+                flipToken(stactedToken)
+            }
         }
 
         ["credit", "advancement", "power", "virus", "tag", "bad-publicity", "brain-damage"].forEach(tokenName => {
@@ -744,7 +768,7 @@
             z-index: 1;
         }
         .game-card:hover {
-            z-index: 10;
+            z-index: 20;
         }
         .card-front {
             transform: translate(-50%, -50%);
