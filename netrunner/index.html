@@ -16,23 +16,37 @@
 </head>
 
 <body>
-    <!-- <div class="modal fade show" style="display: block; background-color: rgba(0, 0, 0, 0.5);" id="staticBackdrop" tabindex="-1">
-        <div class="modal-dialog">
+    <div id="start-game-panel" class="modal fade hide show" style="display: block; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" style="--bs-modal-width: 600px;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h1 class="modal-title fs-5">Start game</h1>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <div class="d-flex justify-content-around align-items-center m-3">
+                        <div style="flex: 0 1 100px;">Host game:</div>
+                        <input id="your-host-id" type="text" style="flex: 1 1 auto;" placeholder="Your host ID" title="Your host ID" readonly value="91eb3626-fe07-4adf-9a73-7496eb1e9b8b">
+                        <button id="host-game" class="btn btn-outline-primary ms-3" style="flex: 0 1 100px;">Copy</button>
+                    </div>
+                    <div class="d-flex justify-content-around align-items-center m-3">
+                        <div style="flex: 0 1 100px; width: 60px;">Join game:</div>
+                        <input id="opponent-host-id" type="text" style="flex: 1 1 auto;" placeholder="Paste host ID" title="Paste host ID">
+                        <button id="join-game" class="btn btn-outline-primary ms-3" style="flex: 0 1 100px;">Join</button>
+                    </div>
+                    <div class="d-flex justify-content-around align-items-center m-3">
+                        <div style="flex: 0 1 100px; width: 60px;">Solo mode:</div>
+                        <input type="text" style="flex: 1 1 auto;" placeholder="No host needed" title="No host needed" disabled>
+                        <button id="play-solo" class="btn btn-outline-primary ms-3" style="flex: 0 1 100px;">Play</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Understood</button>
+                <div class="modal-footer justify-content-start text-secondary">
+                    <p>To host a game pass your host ID to a second player.</p>
+                    <p>To join a game paste host ID you were given and confirm.</p>
+                    <p>You can also start a solo game without using host ID.</p>
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
       
     <div>
         <div id="resource-panel" class="offcanvas offcanvas-start" style="width: 250px; background-color: aliceblue; z-index: 15;" tabindex="-1">
@@ -193,14 +207,18 @@
     </ul>
     <!-- <div class="grid-container" style="width: 100vw; height: 100vh; position: absolute; left: 0px; top: 0px;"></div> for debugging -->
     <div id="card-layer"></div>
-    <div class="text-white p-1" style="position: absolute; left: 100vw; top: 100vh; transform: translate(-100%, -100%)">v0.1.14.1</div>
+    <div class="text-white p-1" style="position: absolute; left: 100vw; top: 100vh; transform: translate(-100%, -100%)">v0.1.14.2</div>
 
 
 
 
 
     <script type="module">
-        window.playerSide = "corp"
+        document.querySelector("#play-solo").addEventListener("click", e => {
+            document.querySelector("#start-game-panel").remove()
+            window.playerSide = "corp"
+            setupGame()
+        })
 
         document.addEventListener("click", e => {
             document.querySelector(".dropdown-menu").style.display = "none"
@@ -238,16 +256,19 @@
         })
 
         const flipBoard = () => {
+            const documentRect = document.querySelector("body").getBoundingClientRect()
             Array.from(document.querySelectorAll("#card-layer>.deck"))
                 .forEach(deck => {
-                    deck.style.left = document.querySelector("body").getBoundingClientRect().width - deck.getBoundingClientRect().x + "px"
-                    deck.style.top = document.querySelector("body").getBoundingClientRect().height - deck.getBoundingClientRect().y + "px"
+                    const deckRect = deck.getBoundingClientRect()
+                    deck.style.left = documentRect.width - deckRect.x + "px"
+                    deck.style.top = documentRect.height - deckRect.y + "px"
                     snapToGrid(deck)
                 })
             Array.from(document.querySelectorAll("#card-layer>.game-card"))
                 .forEach(card => {
-                    card.style.left = document.querySelector("body").getBoundingClientRect().width - card.getBoundingClientRect().x + "px"
-                    card.style.top = document.querySelector("body").getBoundingClientRect().height - card.getBoundingClientRect().y + "px"
+                    const cardRect = card.getBoundingClientRect()
+                    card.style.left = documentRect.width - cardRect.x + "px"
+                    card.style.top = documentRect.height - cardRect.y + "px"
                     snapToGrid(card)
                     updateCardTooltipPosition(card)
                     updateCardArea(card)
@@ -256,8 +277,9 @@
                 })
             Array.from(document.querySelectorAll("#card-layer>.token"))
                 .forEach(token => {
-                    token.style.left = document.querySelector("body").getBoundingClientRect().width - token.getBoundingClientRect().x + "px"
-                    token.style.top = document.querySelector("body").getBoundingClientRect().height - token.getBoundingClientRect().y + "px"
+                    const tokenRect = token.getBoundingClientRect()
+                    token.style.left = documentRect.width - tokenRect.x + "px"
+                    token.style.top = documentRect.height - tokenRect.y + "px"
                     snapToGrid(token, 15)
                 })
         }
@@ -324,7 +346,7 @@
         }
 
         function isPointWithinElement(x, y, element) {
-            const rect = element.getBoundingClientRect();
+            const rect = element.getBoundingClientRect()
             return (
                 x >= rect.left &&
                 x <= rect.right &&
@@ -334,7 +356,6 @@
         }
 
         const createDeck = (allCards, deckList, x, y) => {
-
             const deck = deckList.trim().split("\n").flatMap(entry => {
                 const nameParts = entry.trim().split(" ")
                 const number = parseInt(nameParts.shift().replace("x", ""))
@@ -476,6 +497,8 @@
 
         const putCardUnder = (element) => {
             return e => {
+                e.preventDefault()
+
                 if (e.button === 1) {
                     const cardLayer = document.querySelector("#card-layer")
                     cardLayer.insertBefore(element, cardLayer.firstElementChild)
@@ -571,7 +594,7 @@
                 cardElement.setAttribute("data-hover-location", "deck")
             } else if (cardRect.y > (document.documentElement.clientHeight - handHeight)) {
                 cardElement.setAttribute("data-hover-location", "hand")
-            } else if (cardRect.y <  handHeight) {
+            } else if (cardRect.y < handHeight) {
                 cardElement.setAttribute("data-hover-location", "opponent-hand")
             } else {
                 cardElement.setAttribute("data-hover-location", "board")
@@ -587,7 +610,7 @@
                 cardElement.setAttribute("data-location", "deck")
             } else if (cardRect.y > (document.documentElement.clientHeight - handHeight)) {
                 cardElement.setAttribute("data-location", "hand")
-            } else if (cardRect.y <  handHeight) {
+            } else if (cardRect.y < handHeight) {
                 cardElement.setAttribute("data-location", "opponent-hand")
             } else {
                 cardElement.setAttribute("data-location", "board")
@@ -721,7 +744,7 @@
                     e.preventDefault()
                     e.stopPropagation()
                     
-                    flipToken(tokenElement)
+                    flipToken(tokenElement, key, value)
                 })
             })
             tokenElement.addEventListener("auxclick", e => {
@@ -774,7 +797,7 @@
             })
         }
         
-        function flipToken(tokenElement) {
+        function flipToken(tokenElement, key, value) {
             const newTokenName = tokenElement.firstElementChild.id === key ? value : tokenElement.firstElementChild.id === value ? key : tokenElement.firstElementChild.id
             const newInnerElement = document.querySelector("#" + newTokenName).cloneNode(true)
             newInnerElement.style.position = "absolute";
@@ -783,7 +806,7 @@
 
             const stactedToken = tokenElement.querySelector(".token")
             if (stactedToken) {
-                flipToken(stactedToken)
+                flipToken(stactedToken, key, value)
             }
         }
 
@@ -798,20 +821,20 @@
 
         const setupGame = () => {
             const corpDeckLocation = window.playerSide === "corp" ? ["85vw", "75vh"] : ["15vw", "25vh"]
-            const runnerDeckLocation = window.playerSide === "corp" ? ["15vw", "25vh"] : ["85vw", "75vh"]
-
             const corpIdentityLocation = window.playerSide === "corp" ? ["75vw", "75vh"] : ["25vw", "25vh"]
-            const runnerIndentityLocation = window.playerSide === "corp" ? ["25vw", "25vh"] : ["75vw", "75vh"]
-            
+
             createDeck(allCards, document.querySelector("#corp-deck-list").value, ...corpDeckLocation)
             const corpIndentity = document.querySelector("#corp-identity").value.trim()
             const corpIndentityElement = createCard(allCards.find(cardInfo => cardInfo.title === corpIndentity), ...corpIdentityLocation)
+
+            const runnerDeckLocation = window.playerSide === "corp" ? ["15vw", "25vh"] : ["85vw", "75vh"]
+            const runnerIndentityLocation = window.playerSide === "corp" ? ["25vw", "25vh"] : ["75vw", "75vh"]
 
             createDeck(allCards, document.querySelector("#runner-deck-list").value, ...runnerDeckLocation)
             const runnerIndentity = document.querySelector("#runner-identity").value.trim()
             const runnerIndentityElement = createCard(allCards.find(cardInfo => cardInfo.title === runnerIndentity), ...runnerIndentityLocation)
         }
-        setupGame()
+        // setupGame()
     </script>
 
 
@@ -820,6 +843,8 @@
 
     <style>
         html, body {
+            margin: 0;
+            padding: 0;
             height: 100vh;
             width: 100vw;
             overflow: hidden;
@@ -1009,11 +1034,11 @@
         }
 
         :root {
-            --force-in-view: translate(0px, 0px)
+            --force-in-view: translate(0px, 0px);
         }
 
         .force-in-view {
-            --force-in-view: translate(0px, 375px)
+            --force-in-view: translate(0px, 375px);
         }
 
         .grid-container {
