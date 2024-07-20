@@ -13,6 +13,8 @@
         - add custom events for grab, move, ungrab
         - select oldest card art, lowest id?
     </div>
+    <link rel="stylesheet" href="styles/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
 <body>
@@ -128,7 +130,7 @@
                 <hr>
                 <h5>Decklist:</h5>
                 <div>
-                    <div id="corp-deck">
+                    <div id="corp-deck-panel">
                         <textarea id="corp-identity" rows="1" cols="35" spellcheck="false" class="mb-2" title="Corporation">Pravdivost Consulting: Political Solutions</textarea>
                         <textarea id="corp-deck-list" rows="25" cols="35" spellcheck="false">
 3x Offworld Office
@@ -153,7 +155,7 @@
 3x Karunā
                         </textarea>
                     </div>
-                    <div id="runner-deck" class="hidden">
+                    <div id="runner-deck-panel" class="hidden">
                         <textarea id="runner-identity" rows="1" cols="35" spellcheck="false" class="mb-2" title="Runner">Nyusha "Sable" Sintashta: Symphonic Prodigy</textarea>
                         <textarea id="runner-deck-list" rows="25" cols="35" spellcheck="false">
 1x Burner
@@ -180,7 +182,7 @@
 1x Self-modifying Code
                         </textarea>
                     </div>
-                    <button id="reload-deck-button" class="btn btn-primary mt-2">Reload deck</button>
+                    <button id="load-deck-button" class="btn btn-primary mt-2">Load deck</button>
                 </div>
             </div>
         </div>
@@ -207,13 +209,186 @@
     </ul>
     <!-- <div class="grid-container" style="width: 100vw; height: 100vh; position: absolute; left: 0px; top: 0px;"></div> for debugging -->
     <div id="card-layer"></div>
-    <div class="text-white p-1" style="position: absolute; left: 100vw; top: 100vh; transform: translate(-100%, -100%)">v0.1.14.2</div>
+    <div class="text-white p-1" style="position: absolute; left: 100vw; top: 100vh; transform: translate(-100%, -100%)">
+        v0.2.0.0
+    </div>
 
 
 
 
-
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
     <script type="module">
+        window.sendMessage = () => {}
+
+        function sendCreateMessage(entity, id, params) {
+            window.sendMessage({
+                perspective: window.playerSide,
+                messageType: "create-element",
+                entityType: entity,
+                entityId: id,
+                content: params
+            })
+        }
+
+        function sendGrabMessage(id, x, y) {
+            window.sendMessage({
+                perspective: window.playerSide,
+                messageType: "grab-element",
+                entityId: id,
+                content: {x: x, y: y}
+            })
+        }
+
+        function sendMoveMessage(id, x, y) {
+            window.sendMessage({
+                perspective: window.playerSide,
+                messageType: "move-element",
+                entityId: id,
+                content: {x: x, y: y}
+            })
+        }
+
+        function sendUngrabMessage(id, x, y) {
+            window.sendMessage({
+                perspective: window.playerSide,
+                messageType: "ungrab-element",
+                entityId: id,
+                content: {x: x, y: y}
+            })
+        }
+
+        function receiveMessage(message) {
+            let element = null
+            switch (message.messageType) {
+                case "create-element":
+                    switch (message.entityType) {
+                        case "deck":
+                            if (!document.querySelector("#" + message.entityId)) {
+                                element = createDeck(allCards, ...message.content)
+                                if (message.perspective !== window.playerSide) {
+                                    flipElement(element, document.querySelector("body").getBoundingClientRect())
+                                }
+                                snapToGrid(element)
+                            }
+                            break;
+
+                        case "card":
+                            if (!document.querySelector("#" + message.entityId)) {
+                                element = createCard(...message.content)
+                                if (message.perspective !== window.playerSide) {
+                                    flipElement(element, document.querySelector("body").getBoundingClientRect())
+                                }
+                                snapToGrid(element)
+                            }
+                            break;
+
+                        case "token":
+                            if (!document.querySelector("#" + message.entityId)) {
+                                element = createToken(...message.content)
+                                if (message.perspective !== window.playerSide) {
+                                    flipElement(element, document.querySelector("body").getBoundingClientRect())
+                                }
+                                snapToGrid(element)
+                            }
+                            break;
+                    }
+                    break;
+
+                case "grab-element":
+                    element = document.querySelector("#" + message.entityId)
+                    element.style.left = message.content.x + "px"
+                    element.style.top = message.content.y + "px"
+                    if (message.perspective !== window.playerSide) {
+                        flipElement(element, document.querySelector("body").getBoundingClientRect())
+                    }
+                    element.dispatchEvent(new CustomEvent("grab", {detail: {targetX: message.x, targetY: message.y}}))
+                    break;
+                
+                case "move-element":
+                    element = document.querySelector("#" + message.entityId)
+                    element.style.left = message.content.x + "px"
+                    element.style.top = message.content.y + "px"
+                    if (message.perspective !== window.playerSide) {
+                        flipElement(element, document.querySelector("body").getBoundingClientRect())
+                    }
+                    element.dispatchEvent(new CustomEvent("move", {detail: {targetX: message.x, targetY: message.y}}))
+                    break;
+
+                case "ungrab-element":
+                    element = document.querySelector("#" + message.entityId)
+                    element.style.left = message.content.x + "px"
+                    element.style.top = message.content.y + "px"
+                    if (message.perspective !== window.playerSide) {
+                        flipElement(element, document.querySelector("body").getBoundingClientRect())
+                    }
+                    element.dispatchEvent(new CustomEvent("ungrab", {detail: {targetX: message.x, targetY: message.y}}))
+                    break;
+            }
+        }
+
+        const peer = new window.Peer({
+            key: "netrunner",
+            debug: 4,
+            config: {
+                iceServers: [
+                    {
+                        urls: "turn:global.relay.metered.ca:80",
+                        username: "0216de3689c0327b92c21461",
+                        credential: "fAMGCn8IVFAJA0ZZ"
+                    }
+                ]
+            }
+        })
+
+        peer.on("open", id => {
+            const yourHostId = document.querySelector("#your-host-id")
+            yourHostId.value = id
+            window.location.hash = id
+
+            const opponentHostId = document.querySelector("#opponent-host-id")
+            opponentHostId.value = ""
+        })
+        peer.on("connection", (connection) => {
+            setupP2PConnection(connection)
+            document.querySelector("#start-game-panel").remove()
+            window.playerSide = "corp"
+            document.querySelector("#open-player-panel").click()
+        })
+        const setupP2PConnection = (connection) => {
+            const parser = new DOMParser()
+            window.sendMessage = throttle((message) => connection.send(message), 200)
+
+            connection.on("data", message => {
+                console.log(`Peer:`, message)
+                receiveMessage(message)
+            })
+
+            connection.on("open", () => {
+                console.log("Connection established. You can send messages now.")
+            })
+
+            connection.on("close", () => {
+                console.log("Data connection has been closed.")
+            });
+        }
+
+        document.querySelector("#opponent-host-id").focus()
+
+        document.querySelector("#host-game").addEventListener("click", e => {
+            const yourHostId = document.querySelector("#your-host-id")
+            yourHostId.select()
+            navigator.clipboard.writeText(yourHostId.value)
+        })
+
+        document.querySelector("#join-game").addEventListener("click", e => {
+            const opponentHostId = document.querySelector("#opponent-host-id")
+            const connection = peer.connect(opponentHostId.value)
+            setupP2PConnection(connection)
+            document.querySelector("#start-game-panel").remove()
+            window.playerSide = "corp"
+            document.querySelector("#open-player-panel").click()
+        })
+
         document.querySelector("#play-solo").addEventListener("click", e => {
             document.querySelector("#start-game-panel").remove()
             window.playerSide = "corp"
@@ -255,20 +430,27 @@
             resourcePanel.classList.add("hiding")
         })
 
+        const flipElement = (element, documentRect) => {
+            const elementRect = element.getBoundingClientRect()
+            element.style.left = documentRect.width - elementRect.x + "px"
+            element.style.top = documentRect.height - elementRect.y + "px"
+            return element
+        }
+
         const flipBoard = () => {
-            const documentRect = document.querySelector("body").getBoundingClientRect()
+            const bodyRect = document.querySelector("body").getBoundingClientRect()
             Array.from(document.querySelectorAll("#card-layer>.deck"))
                 .forEach(deck => {
                     const deckRect = deck.getBoundingClientRect()
-                    deck.style.left = documentRect.width - deckRect.x + "px"
-                    deck.style.top = documentRect.height - deckRect.y + "px"
+                    deck.style.left = bodyRect.width - deckRect.x + "px"
+                    deck.style.top = bodyRect.height - deckRect.y + "px"
                     snapToGrid(deck)
                 })
             Array.from(document.querySelectorAll("#card-layer>.game-card"))
                 .forEach(card => {
                     const cardRect = card.getBoundingClientRect()
-                    card.style.left = documentRect.width - cardRect.x + "px"
-                    card.style.top = documentRect.height - cardRect.y + "px"
+                    card.style.left = bodyRect.width - cardRect.x + "px"
+                    card.style.top = bodyRect.height - cardRect.y + "px"
                     snapToGrid(card)
                     updateCardTooltipPosition(card)
                     updateCardArea(card)
@@ -278,8 +460,8 @@
             Array.from(document.querySelectorAll("#card-layer>.token"))
                 .forEach(token => {
                     const tokenRect = token.getBoundingClientRect()
-                    token.style.left = documentRect.width - tokenRect.x + "px"
-                    token.style.top = documentRect.height - tokenRect.y + "px"
+                    token.style.left = bodyRect.width - tokenRect.x + "px"
+                    token.style.top = bodyRect.height - tokenRect.y + "px"
                     snapToGrid(token, 15)
                 })
         }
@@ -293,8 +475,8 @@
             document.querySelector("#your-title").innerText = "Corporation"
             document.querySelector("#opponent-title").innerText = "Runner"
 
-            document.querySelector("#corp-deck").classList.remove("hidden")
-            document.querySelector("#runner-deck").classList.add("hidden")
+            document.querySelector("#corp-deck-panel").classList.remove("hidden")
+            document.querySelector("#runner-deck-panel").classList.add("hidden")
         })
         document.querySelector("#runner-check").addEventListener("click", e => {
             console.log(window.playerSide)
@@ -305,14 +487,63 @@
             document.querySelector("#your-title").innerText = "Runner"
             document.querySelector("#opponent-title").innerText = "Corporation"
 
-            document.querySelector("#corp-deck").classList.add("hidden")
-            document.querySelector("#runner-deck").classList.remove("hidden")
+            document.querySelector("#corp-deck-panel").classList.add("hidden")
+            document.querySelector("#runner-deck-panel").classList.remove("hidden")
         })
 
-        document.querySelector("#reload-deck-button").addEventListener("click", e => {
-            document.querySelector("#card-layer").innerHTML = ""
-            setupGame()
+        document.querySelector("#load-deck-button").addEventListener("click", e => {
+            if (window.playerSide === "corp") {
+                document.querySelector("#card-layer>#corp-deck")?.remove()
+                document.querySelectorAll('#card-layer>.game-card[data-side="corp"]').forEach(card => card.remove())
+                setupCorp()
+            } else {
+                document.querySelector("#card-layer>#runner-deck")?.remove()
+                document.querySelectorAll('#card-layer>.game-card[data-side="runner"]').forEach(card => card.remove())
+                setupRunner()
+            }
         })
+
+        function throttle(func, wait, options) {
+            var timeout, context, args, result;
+            var previous = 0;
+            if (!options) options = {};
+
+            var later = function() {
+                previous = options.leading === false ? 0 : Date.now();
+                timeout = null;
+                result = func.apply(context, args);
+                if (!timeout) context = args = null;
+            };
+
+            var throttled = function() {
+                var _now = Date.now();
+                if (!previous && options.leading === false) previous = _now;
+                var remaining = wait - (_now - previous);
+                context = this;
+                args = arguments;
+                if (remaining <= 0 || remaining > wait) {
+                    if (timeout) {
+                        clearTimeout(timeout);
+                        timeout = null;
+                    }
+                    previous = _now;
+                    result = func.apply(context, args);
+                    if (!timeout) context = args = null;
+                } else if (!timeout && options.trailing !== false) {
+                    timeout = setTimeout(later, remaining);
+                }
+                return result;
+            };
+
+            throttled.cancel = function() {
+                clearTimeout(timeout);
+                previous = 0;
+                timeout = context = args = null;
+            };
+            return throttled;
+        }
+
+        // document.addEventListener("mousemove", throttle(e => console.log(e), 500))
 
         async function fetchAllCards() {
             try {
@@ -355,7 +586,7 @@
             )
         }
 
-        const createDeck = (allCards, deckList, x, y) => {
+        const createDeck = (allCards, deckList, id, x, y) => {
             const deck = deckList.trim().split("\n").flatMap(entry => {
                 const nameParts = entry.trim().split(" ")
                 const number = parseInt(nameParts.shift().replace("x", ""))
@@ -366,6 +597,7 @@
             shuffle(deck)
 
             const deckElement = document.createElement("div")
+            deckElement.id = id
             deckElement.title = deck.length + " cards"
             deckElement.style.left = x
             deckElement.style.top = y
@@ -421,7 +653,8 @@
             deckElement.addEventListener("shuffle", e => {
                 shuffle(deck)
             })
-
+            
+            sendCreateMessage("deck", id, [deckList, id, x, y])
             return deckElement
         }
 
@@ -435,14 +668,14 @@
             }
         }
 
-        const createCard = (cardInfo, x, y) => {
+        const createCard = (cardInfo, x, y, id) => {
             const cardElement = document.createElement("div")
             cardElement.setAttribute("data-title", cardInfo.title)
             cardElement.setAttribute("data-side", cardInfo.side_code)
             cardElement.setAttribute("data-faction", cardInfo.faction_code)
             cardElement.setAttribute("data-type", cardInfo.type_code)
             cardElement.setAttribute("data-location", "deck")
-            cardElement.setAttribute("id", crypto.randomUUID())
+            cardElement.setAttribute("id", id ? id : "card-" + crypto.randomUUID())
             cardElement.style = `left: ${x}; top: ${y};`
             cardElement.classList.add("game-card")
             cardElement.innerHTML = `
@@ -486,6 +719,7 @@
             snapToGrid(cardElement)
             updateCardTooltipPosition(cardElement)
             handleCardBehavior(cardElement)
+            sendCreateMessage("card", cardElement.id, [cardInfo, x, y, cardElement.id])
             return cardElement
         }
 
@@ -539,6 +773,7 @@
                     document.querySelector("body").addEventListener("mouseup", thisUngrab)
 
                     element.dispatchEvent(new CustomEvent("grab", {detail: {targetX: elementRect.x, targetY: elementRect.y}}))
+                    sendGrabMessage(element.id, elementRect.x, elementRect.y)
                 }
             }
 
@@ -550,6 +785,7 @@
                 element.style.top = e.clientY + offsetY + "px"
 
                 element.dispatchEvent(new CustomEvent("move", {detail: {targetX: e.clientX + offsetX, targetY: e.clientY + offsetY}}))
+                sendMoveMessage(element.id, e.clientX + offsetX, e.clientY + offsetY)
             }
 
             const ungrab = (thisMove) => {
@@ -561,6 +797,7 @@
 
                     const elementRect = element.getBoundingClientRect()
                     element.dispatchEvent(new CustomEvent("ungrab", {detail: {targetX: elementRect.x, targetY: elementRect.y}}))
+                    sendUngrabMessage(element.id, elementRect.x, elementRect.y)
                 }
                 return thisUngrab
             }
@@ -695,7 +932,8 @@
             }
         }
 
-        const createToken = (tokenName, x, y) => {
+        const createToken = (tokenName, x, y, id) => {
+            console.log(tokenName, x, y, id);
             const tokenElement = document.createElement("div")
 
             const innerElement = document.querySelector("#" + tokenName).cloneNode(true)
@@ -703,7 +941,7 @@
             innerElement.style.transform += "translate(-50%, -50%) translate(-10px, -10px)"
             tokenElement.appendChild(innerElement)
 
-            tokenElement.id = crypto.randomUUID()
+            tokenElement.id = id ? id : "token-" + crypto.randomUUID()
             tokenElement.classList.add("token")
             tokenElement.style.left = x
             tokenElement.style.top = y
@@ -757,6 +995,7 @@
                 }
             })
             document.querySelector("#card-layer").appendChild(tokenElement)
+            sendCreateMessage("token", tokenElement.id, [tokenName, x, y, tokenElement.id])
             return tokenElement
         }
 
@@ -819,238 +1058,29 @@
             })
         })
 
-        const setupGame = () => {
+        const setupCorp = () => {
             const corpDeckLocation = window.playerSide === "corp" ? ["85vw", "75vh"] : ["15vw", "25vh"]
             const corpIdentityLocation = window.playerSide === "corp" ? ["75vw", "75vh"] : ["25vw", "25vh"]
 
-            createDeck(allCards, document.querySelector("#corp-deck-list").value, ...corpDeckLocation)
+            createDeck(allCards, document.querySelector("#corp-deck-list").value, "corp-deck", ...corpDeckLocation)
             const corpIndentity = document.querySelector("#corp-identity").value.trim()
             const corpIndentityElement = createCard(allCards.find(cardInfo => cardInfo.title === corpIndentity), ...corpIdentityLocation)
+        }
 
+        const setupRunner = () => {
             const runnerDeckLocation = window.playerSide === "corp" ? ["15vw", "25vh"] : ["85vw", "75vh"]
             const runnerIndentityLocation = window.playerSide === "corp" ? ["25vw", "25vh"] : ["75vw", "75vh"]
 
-            createDeck(allCards, document.querySelector("#runner-deck-list").value, ...runnerDeckLocation)
+            createDeck(allCards, document.querySelector("#runner-deck-list").value, "runner-deck", ...runnerDeckLocation)
             const runnerIndentity = document.querySelector("#runner-identity").value.trim()
             const runnerIndentityElement = createCard(allCards.find(cardInfo => cardInfo.title === runnerIndentity), ...runnerIndentityLocation)
         }
-        // setupGame()
+        const setupGame = () => {
+            setupCorp()
+            setupRunner()
+        }
     </script>
 
-
-
-
-
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-        }
-        .flex-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            width: 100vw;
-        }
-        .player-hand {
-            height: 150px;
-            background-color: lightskyblue;
-        }
-        .board {
-            flex-grow: 1;
-            background-color: lightblue;
-        }
-
-        .deck {
-            position: absolute;
-            transform: translate(-50%, -50%) scale(.5);
-        }
-        .deck-card-back {
-            position: absolute;
-            transform: translate(-50%, -50%) translate(-5px, 5px);
-            padding-left: 10px;
-            padding-bottom: 10px;
-            border: 5px solid black;
-            border-radius: 11px;
-            border-top-left-radius: 25px;
-            border-bottom-right-radius: 25px;
-            overflow: hidden;
-            background-color: black;
-        }
-        .red-tint::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 0, 0, 0.5);
-            mix-blend-mode: multiply;
-        }
-
-        .game-card {
-            position: absolute;
-            transform: translate(-50%, -50%) scale(.5);
-            z-index: 1;
-        }
-        .game-card:hover {
-            z-index: 20;
-        }
-        .card-front {
-            transform: translate(-50%, -50%);
-            border: 3px solid black;
-            border-radius: 11px;
-            background-color: black;
-            overflow: hidden;
-            position: absolute;
-        }
-        .card-back {
-            transform: translate(-50%, -50%);
-            border: 3px solid black;
-            border-radius: 11px;
-            background-color: black;
-            overflow: hidden;
-            position: absolute;
-        }
-
-        .game-card-tooltip {
-            border: 3px solid black;
-            border-radius: 11px;
-            background-color: black;
-            overflow: hidden;
-            position: absolute;
-            visibility: hidden;
-            transform: scale(3.1415) translate(-30px, -230px) var(--force-in-view);
-            
-            z-index: 3099;
-        }
-
-        .game-card:hover .game-card-tooltip {
-            visibility: visible;
-        }
-
-        .hidden {
-            display: none;
-        }
-        .flipped>:not(.hidden) {
-            display: none;
-        }
-        .flipped>.hidden {
-            display: block;
-        }
-        .flipped>.card-front.hidden~.game-card-tooltip:not(.hidden) {
-            display: block;
-        }
-
-        .game-card.rotated {
-            transform: translate(-50%, -50%) scale(.5) rotate(90deg);
-        }
-        .rotated .game-card-tooltip {
-            transform: rotate(-90deg) scale(3.1415) translate(45px, -210px) var(--force-in-view);
-        }
-
-        .token {
-            position: absolute;
-            z-index: 20;
-            display: block !important;
-        }
-        .game-card>.token {
-            transform: scale(2) translate(50%, 50%);
-        }
-        .game-card.rotated>.token {
-            transform: rotate(-90deg) scale(2) translate(50%, 50%);
-        }
-        .token:hover {
-            z-index: 25;
-        }
-        .token-bin {
-            border: 1px lightgrey dashed;
-            border-radius: 15px;
-            border-width: 3px;
-            color: lightgrey;
-        }
-        .token-bin-active {
-            color: red;
-            border-color: red;
-        }
-
-        .game-card[data-location="hand"]:not([data-hover-location="hand"])>* {
-            box-shadow:
-                0 0 5px rgba(165, 255, 47, 0.5),
-                0 0 10px rgba(165, 255, 47, 0.5),
-                0 0 20px rgba(165, 255, 47, 0.5),
-                0 0 30px rgba(165, 255, 47, 0.5),
-                0 0 40px rgba(165, 255, 47, 0.5);
-        }
-        .game-card:not([data-location="hand"])[data-hover-location="hand"]>* {
-            box-shadow:
-                0 0 5px rgba(255, 165, 0, 0.5),
-                0 0 10px rgba(255, 165, 0, 0.5),
-                0 0 20px rgba(255, 165, 0, 0.5),
-                0 0 30px rgba(255, 165, 0, 0.5),
-                0 0 40px rgba(255, 165, 0, 0.5);
-        }
-        .game-card:not([data-location="deck"])[data-hover-location="deck"]>* {
-            box-shadow:
-                0 0 5px rgba(0, 191, 255, 0.5),
-                0 0 10px rgb(0, 191, 255, 0.5),
-                0 0 20px rgba(0, 191, 255, 0.5),
-                0 0 30px rgba(0, 191, 255, 0.5),
-                0 0 40px rgba(0, 191, 255, 0.5);
-        }
-
-        .game-card[data-location="board"]>* {
-            animation: glow-impulse 1s normal;
-        }
-
-        @keyframes glow-impulse {
-            0% {
-                box-shadow:
-                0 0 5px rgba(255, 255, 255, 0),
-                0 0 10px rgba(255, 255, 255, 0),
-                0 0 20px rgba(255, 255, 255, 0),
-                0 0 30px rgba(255, 255, 255, 0),
-                0 0 40px rgba(255, 255, 255, 0);
-            }
-            5% {
-                box-shadow:
-                0 0 5px rgba(255, 255, 255, 1),
-                0 0 10px rgba(255, 255, 255, 1),
-                0 0 20px rgba(255, 255, 255, 1),
-                0 0 30px rgba(255, 255, 255, 1),
-                0 0 40px rgba(255, 255, 255, 1);
-            }
-            100% {
-                box-shadow:
-                0 0 5px rgba(255, 255, 255, 0),
-                0 0 10px rgba(255, 255, 255, 0),
-                0 0 20px rgba(255, 255, 255, 0),
-                0 0 30px rgba(255, 255, 255, 0),
-                0 0 40px rgba(255, 255, 255, 0);
-            }
-        }
-
-        :root {
-            --force-in-view: translate(0px, 0px);
-        }
-
-        .force-in-view {
-            --force-in-view: translate(0px, 375px);
-        }
-
-        .grid-container {
-            width: 100%;
-            height: 100vh;
-            background-image: 
-                linear-gradient(to right, lightgray 1px, transparent 1px),
-                linear-gradient(to bottom, lightgray 1px, transparent 1px);
-            background-size: 25px 25px;
-        }
-    </style>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </body>
 
 </html>
