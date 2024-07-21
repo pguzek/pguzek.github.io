@@ -137,8 +137,8 @@ export const snapOutOfHandArea = (cardElement) => {
     const cardY = cardElement.getBoundingClientRect().y
     if (yourHandY - cardY < 75) {
         cardElement.style.top = cardY - (75 - (yourHandY - cardY)) + "px"
-        snapToGrid(cardElement)
     }
+    snapToGrid(cardElement)
 }
 
 const snapIntoHandArea = (cardElement) => {
