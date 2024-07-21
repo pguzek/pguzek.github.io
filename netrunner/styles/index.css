@@ -50,14 +50,16 @@ h1, h2, h3, h4, h5, h6 {
 
 #your-title, #opponent-title {
     color: #2ceef0 !important;
-    text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
-        0px 8px 13px rgba(0,0,0,0.1),
-        0px 18px 23px rgba(0,0,0,0.1);
+    text-shadow:
+        0px 4px 3px rgba(0,0,0,0.3),
+        0px 8px 13px rgba(0,0,0,0.3),
+        0px 18px 23px rgba(0,0,0,0.3);
 }
 #open-resource-panel, #open-player-panel {
     color: #2CEEF0;
     background-color: #0C4160 !important;
     border: 1px solid #2cedf0;
+    border-left: 0;
     text-shadow:
         0px 4px 3px rgba(0,0,0,0.4),
         0px 8px 13px rgba(0,0,0,0.4),
@@ -66,24 +68,28 @@ h1, h2, h3, h4, h5, h6 {
 .player-hand {
     height: 150px;
     box-shadow:
-                0 0 5px rgba(44, 238, 240, 0.5),
-                0 0 10px rgb(44, 238, 240, 0.5),
-                0 0 20px rgba(44, 238, 240, 0.5);
+        0 0 3px rgb(44, 238, 240, 0.4),
+        0 0 6px rgb(44, 238, 240, 0.4),
+        0 0 9px rgb(44, 238, 240, 0.4),
+        0 0 5px rgba(0, 0, 0, 0.3),
+        0 0 10px rgb(0, 0, 0, 0.3),
+        0 0 20px rgba(0, 0, 0, 0.3),
+        0 0 30px rgba(0, 0, 0, 0.3);
     background-color: #0C4160 !important;
     opacity: 0.6;
     background-image:
         /* Horizontal lines */
         linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
         /* Vertical lines */
         linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+        linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
     background-size: 
         /* Size of horizontal lines */
-        20px 20px,
+        25px 25px,
         100px 100px,
         /* Size of vertical lines */
-        20px 20px,
+        25px 25px,
         100px 100px;
     background-position: 
         /* Position of horizontal lines */
@@ -92,4 +98,12 @@ h1, h2, h3, h4, h5, h6 {
         /* Position of vertical lines */
         0 0,
         5px 0;
+}
+
+#your-hand {
+    border-top: 1px solid #2cedf0;
+}
+
+#opponent-hand {
+    border-bottom: 1px solid #2cedf0;
 }
