@@ -1,6 +1,6 @@
-import { shuffle, snapToGrid } from "./utils.js"
+import { shuffle } from "./utils.js"
 import { sendCreateMessage } from "./p2p.js"
-import { createCard } from "./card.js"
+import { createCard, snapOutOfHandArea } from "./card.js"
 import { grabCard } from "./grab.js"
 
 export const createDeck = (deckList, id, x, y) => {
@@ -24,7 +24,7 @@ export const createDeck = (deckList, id, x, y) => {
         <img width="190" height="265" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEArMDpLqCtEe0kLcWh5dJj0s-dAnCShz_cQ&s">
     </div>`
     document.querySelector("#card-layer").appendChild(deckElement)
-    snapToGrid(deckElement)
+    snapOutOfHandArea(deckElement)
 
     deckElement.addEventListener("mousedown", e => {
         e.preventDefault()

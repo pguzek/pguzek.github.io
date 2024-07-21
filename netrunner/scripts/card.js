@@ -50,7 +50,7 @@ export const createCard = (cardInfo, x, y, id) => {
             cardElement.remove()
         }
     })
-    snapToGrid(cardElement)
+    snapOutOfHandArea(cardElement)
     updateCardTooltipPosition(cardElement)
     handleCardBehavior(cardElement)
     sendCreateMessage("card", cardElement.id, [cardInfo, x, y, cardElement.id])
@@ -131,6 +131,22 @@ export const updateCardArea = (cardElement) => {
     }
 }
 
+
+export const snapOutOfHandArea = (cardElement) => {
+    const yourHandY = document.querySelector("#your-hand").getBoundingClientRect().y
+    const cardY = cardElement.getBoundingClientRect().y
+    if (yourHandY - cardY < 75) {
+        cardElement.style.top = cardY - (75 - (yourHandY - cardY)) + "px"
+        snapToGrid(cardElement)
+    }
+}
+
+const snapIntoHandArea = (cardElement) => {
+    const yourHandRect = document.querySelector("#your-hand").getBoundingClientRect()
+    cardElement.style.top = yourHandRect.y + yourHandRect.height / 2 + "px"
+    snapToGrid(cardElement)
+}
+
 export const handleCardBehavior = (cardElement) => {
     const cardLocation = cardElement.getAttribute("data-location")
 
@@ -147,9 +163,7 @@ export const handleCardBehavior = (cardElement) => {
         case "hand":
             cardElement.classList.remove("flipped")
             cardVisibility(cardElement, true, false, true)
-            const yourHandRect = document.querySelector("#your-hand").getBoundingClientRect()
-            cardElement.style.top = yourHandRect.y + yourHandRect.height / 2 + "px"
-            snapToGrid(cardElement)
+            snapIntoHandArea(cardElement)
             break
 
         case "opponent-hand":
@@ -171,12 +185,7 @@ export const handleCardBehavior = (cardElement) => {
             } else {
                 cardVisibility(cardElement, true, false, true)
             }
-            const yourHandY = document.querySelector("#your-hand").getBoundingClientRect().y
-            const cardY = cardElement.getBoundingClientRect().y
-            if (yourHandY - cardY < 75) {
-                cardElement.style.top = cardY - (75 - (yourHandY - cardY)) + "px"
-                snapToGrid(cardElement)
-            }
+            snapOutOfHandArea(cardElement)
             break
 
         case "bin":
