@@ -1,0 +1,26 @@
+.deck {
+    position: absolute;
+    transform: translate(-50%, -50%) scale(.5);
+}
+.deck-card-back {
+    position: absolute;
+    transform: translate(-50%, -50%) translate(-5px, 5px);
+    padding-left: 10px;
+    padding-bottom: 10px;
+    border: 5px solid black;
+    border-radius: 11px;
+    border-top-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    overflow: hidden;
+    background-color: black;
+}
+.red-tint::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 0, 0, 0.5);
+    mix-blend-mode: multiply;
+}
