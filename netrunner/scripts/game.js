@@ -35,6 +35,12 @@ export const main = async () => {
         return cardIfo
     }))
 
+    document.addEventListener("mousedown", e => {
+        if (e.button === 1) {
+            e.preventDefault() //prevent MMB auto-scroll
+        }
+    })
+
     document.addEventListener("click", e => {
         document.querySelector(".dropdown-menu").style.display = "none"
     })
