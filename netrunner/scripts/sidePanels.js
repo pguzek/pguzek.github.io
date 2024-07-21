@@ -53,6 +53,12 @@ export const setupSidePanels = () => {
     resourcePanel.addEventListener("focusout", e => {
         resourcePanel.classList.add("hiding")
     })
+
+    document.querySelector(".flex-container").addEventListener("mousemove", e => {
+        if (e.clientX === 0) {
+            document.querySelector("#open-resource-panel").click()
+        }
+    })
     
     document.querySelector("#corp-check").checked = "true"
     document.querySelector("#corp-check").addEventListener("click", e => {
