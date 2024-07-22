@@ -54,9 +54,11 @@ export const setupSidePanels = () => {
         resourcePanel.classList.add("hiding")
     })
 
-    document.querySelector(".flex-container").addEventListener("mousemove", e => {
+    document.querySelector(".flex-container").parentElement.addEventListener("mousemove", e => {
         if (e.clientX === 0) {
             document.querySelector("#open-resource-panel").click()
+        } else if (e.clientX === window.screen.width - 1) {
+            document.querySelector("#open-player-panel").click()
         }
     })
     
